@@ -158,3 +158,108 @@ WHERE COMMISSION IN (300,500,1400);
 -- 사원 테이블 : EMPLOYEE
 SELECT * FROM EMPLOYEE
 WHERE DNO IN (10, 20);
+
+-- *) NOT IN 예약어
+-- 예제 9) 상여금(COMMISSION) 300 이 아니고, 
+--          500 이 아니고, 1400 아닌 사원 조회하기
+-- => 반대 : Not (300 이거나(OR) 500 이거나 1400 이거나)
+-- 사원테이블 : EMPLOYEE
+SELECT * FROM EMPLOYEE
+WHERE COMMISSION NOT IN (300, 500, 1400);
+
+
+-- *) LIKE 검색(*****)
+-- 의미 : 일부 키워드(영어, 한글)만 사용해서 비슷한 것들만 조회하기
+--  예) 이름이 K 시작하는 사원들 조회
+-- 예제 10) 이름이(ENAME) 'F' 로 시작하는 사원 조회하기(전체조회:*)
+-- 사원 테이블 : EMPLOYEE
+-- 사용법) SELECT 컬럼명,... FROM 테이블명
+--        WHERE 컬럼명 LIKE '%문자%';
+-- % : 아무 글자나 올 수 있음의 의미, 문자를 기준으로 앞/뒤 사용가능
+SELECT * FROM EMPLOYEE
+WHERE ENAME LIKE 'F%';
+
+-- 연습 13) 이름에 'M' 이 포함되어 있는 사원 조회하기(전체 조회)
+-- 사원 : EMPLOYEE
+-- 사원명 컬럼 : ENAME
+-- 결과 : 5건
+SELECT * FROM EMPLOYEE
+WHERE ENAME LIKE '%M%';
+
+-- 연습 14) 이름이 'N' 으로 끝나는 사원 조회하기(전체 조회)
+-- 사원 : EMPLOYEE
+-- 사원명 컬럼 : ENAME
+-- 결과 : 2건
+SELECT * FROM EMPLOYEE
+WHERE ENAME LIKE '%N';
+
+-- 예제 11) (참고) 이름(ENAME) 의 두번째 글자가 'A'인 사원 조회하기
+-- LIKE 기호 : % (어떤 문자열을 의미)
+--             _ (어떤 1문자를 의미)
+-- 사원 테이블 : EMPLOYEE
+SELECT * FROM EMPLOYEE
+WHERE ENAME LIKE '_A%';
+
+-- 연습 15) 이름의 세번째 글자가 'A' 인 사원 조회하기
+-- 사원 테이블 : EMPLOYEE
+SELECT * FROM EMPLOYEE
+WHERE ENAME LIKE '__A%';
+
+-- *) NOT LIKE 예약어(*)
+-- BETWEEN, IN 앞에 NOT 부정의 의미, 마찬가지로 LIKE 앞에 NOT 붙이면 반대(부정)의 의미
+-- 예제 11) 이름에 'A' 가 포함되지 않는 사원을 조회
+-- 사원 테이블 : EMPLOYEE
+SELECT * FROM EMPLOYEE
+WHERE ENAME NOT LIKE '%A%';
+
+-- *) NULL 검색(조회)
+-- NULL : SQL 에서 NULL 은 아무것도 없는 값, 연산이 안됨
+-- 예제 12) 상여금(COMMISSION) 이 NULL 인 사원을 조회
+-- 사원 : EMPLOYEE
+SELECT * FROM EMPLOYEE
+WHERE COMMISSION = NULL; -- X (결과 없음)
+
+-- 1) IS NULL , IS NOT NULL 예약어
+-- IS NULL     : NULL 인 정보만 조회
+-- IS NOT NULL : NULL 이 아닌 정보만 조회
+-- 수정
+SELECT * FROM EMPLOYEE
+WHERE COMMISSION IS NULL; -- O (결과 나옴) 
+
+-- 예제 13) 상여금(COMMISSION) 이 NULL 이 아닌 사원을 조회
+SELECT * FROM EMPLOYEE
+WHERE COMMISSION IS NOT NULL;
+
+-- *) ORDER BY : 정렬 기능
+-- 사용 : 속도 저하
+-- 예제 14) 사원(EMPLOYEE) 테이블 오름차순 정렬하기
+--  단, 월급(SALARY)으로 정렬하세요
+-- 오름차순 : 작은순부터 큰순으로 정렬하는것
+-- 내림차순 : 큰순부터 작은순으로 정렬하는것
+-- 사용법) SELECT * FROM 테이블명
+--         ORDER BY 컬럼명 ASC[DESC];
+-- ASC  : asending  , 오름차순, 생략가능
+-- DESC : desending , 내림차순
+SELECT * FROM EMPLOYEE
+ORDER BY SALARY ASC; -- ASC(생략가능)
+
+-- 예제 15) 사원(EMPLOYEE) 테이블 내림차순 정렬하기
+--  단, 월급(SALARY)으로 정렬하세요
+SELECT * FROM EMPLOYEE
+ORDER BY SALARY DESC; -- DESC (생략불가)
+
+-- 연습 16) 사원 테이블에서(EMPLOYEE) 사원명으로(ENAME) 오름차순 정렬해서 조회하세요
+-- 사원 : EMPLOYEE
+SELECT * FROM EMPLOYEE
+ORDER BY ENAME ASC;
+
+-- 연습 17) 입사일(HIREDATE) 데이터로 내림차순 정렬하세요
+-- 사원 : EMPLOYEE
+SELECT * FROM EMPLOYEE
+ORDER BY HIREDATE DESC;
+
+-- 연습 9) 사원테이블에서(EMPLOYEE) 급여는(SALARY) 내림차순으로 정렬하고,
+--         사원명은(ENAME) 오름차순으로 정렬하세요
+-- 사용법 응용) ORDER BY 컬럼명 ASC[DESC], 컬럼명2 ASC[DESC] ...
+SELECT * FROM EMPLOYEE
+ORDER BY SALARY DESC, ENAME ASC;
