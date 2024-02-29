@@ -54,3 +54,34 @@ FROM DUAL;
 -- 공식 : 현재시간 - 입사일(HIREDATE) : 근무일수
 -- 사원 : EMPLOYEE
 SELECT ROUND(SYSDATE - HIREDATE) FROM EMPLOYEE;
+
+-- 2) 두 날짜 사이의 개월수를 출력하는 함수 :
+-- 사용법) MONTHS_BETWEEN(날짜1, 날짜2)
+-- 예제 3) 각 사원들이 근무한 개월 수 구하기
+-- 날짜 연산 : 소수점 나옴 -> 절삭(버림, TRUNC()), 반올림(ROUND())
+-- 사원 : EMPLOYEE
+-- 계산공식 : (현재날짜, 입사일)
+SELECT ENAME, SYSDATE, HIREDATE,
+    TRUNC(MONTHS_BETWEEN(SYSDATE, HIREDATE)) AS 개월수
+FROM EMPLOYEE;
+
+-- 3) 개월수 더하기 함수 : ADD_MONTHS
+-- 사용법) ADD_MONTHS(날짜컬럼, 더할_개월수)
+-- 예제 4) 입사일에서 6개월이 지난 시점에 날짜 구하기
+SELECT ENAME, HIREDATE,
+    ADD_MONTHS(HIREDATE, 6) AS 월더하기
+FROM EMPLOYEE;
+
+-- 4) 날짜컬럼에서 데이터가 최초로 도래하는 요일의 날짜 출력 :NEXT_DAY
+-- 사용법) NEXT_DAY(날짜컬럼, '요일')
+-- 예제 5) 오늘을 기준으로 최초로 도래하는 토요일의 날짜 구하기
+SELECT SYSDATE,
+    NEXT_DAY(SYSDATE, '토요일')
+FROM DUAL;
+
+-- 5) LAST_DAY(날짜컬럼)
+-- 날짜컬럼의 그 달(월)의 마지막 날의 날짜를 구해주는 함수
+-- 예제 6) 입사한(HIREDATE) 날의 마지막 날짜 구하기
+SELECT ENAME, HIREDATE,
+    LAST_DAY(HIREDATE)
+FROM EMPLOYEE;
