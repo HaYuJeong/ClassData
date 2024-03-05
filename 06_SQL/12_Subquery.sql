@@ -73,17 +73,26 @@ SELECT EM.ENAME, EM.ENO
 FROM (SELECT ENAME, ENO FROM EMPLOYEE) EM;
 
 -- 4) 다중 행 서브쿼리 : 서브쿼리의 결과로 여러건이 나옴
+-- 사용법) SELECT 컬럼명
+--         FROM 테이블1
+--         WHERE 비교컬럼 IN (SELECT 비교컬럼
+--                          FROM 테이블2);
+-- 주의점 : (서브쿼리) 의 결과가 여러건일때 IN 연산자를 사용해야함
 -- 예제4) (1)부서별 최소 급여를 받는 사원 중에서 (2) 사원번호와 이름을 출력하세요
--- (1) 부서별(DNO) 최소 급여(MIN(SALARY)) : 
+-- (1) 부서별(DNO) 최소 급여(MIN(SALARY)) : 950 1300 800
 SELECT MIN(SALARY)
 FROM EMPLOYEE
 GROUP BY DNO;
 
+-- (2) 그 값들과 같은 급여를 받는 사원번호, 이름 출력 : 
+-- 힌트 : IN (서브쿼리) [= 안됨]
+SELECT ENO, ENAME
+FROM EMPLOYEE
+WHERE SALARY IN (950,1300,800);
+
+-- 최종쿼리
 SELECT ENO, ENAME
 FROM EMPLOYEE
 WHERE SALARY IN (SELECT MIN(SALARY)
-FROM EMPLOYEE
-GROUP BY DNO);
-
--- (2) 그 값들과 같은 급여를 받는 사원번호, 이름 출력 : 
--- 힌트 : IN (서브쿼리) [= 안됨]
+                FROM EMPLOYEE
+                GROUP BY DNO);
