@@ -46,3 +46,100 @@ SELECT * FROM DEPT_COPY;
 
 -- 확정
 COMMIT;
+
+-- 예제 3) 전체 부서에 대해 값 수정하기 : 조건절 빼기
+--        부서명을(DNAME) 'PROGRAMMING2', 부서위치를(LOC) 'SEOUL' 로 수정하세요
+UPDATE DEPT_COPY
+SET
+    DNAME = 'PROGRAMMING2',
+    LOC   = 'SEOUL';
+
+-- 데이터 확인
+SELECT * FROM DEPT_COPY;
+
+-- 취소 
+ROLLBACK;
+
+-- 예제 4) 10 번 부서의 지역명을 (20번 부서의 지역명으로) 수정하기
+-- 1) 20번 부서의 지역명 ? DALLAS
+SELECT LOC FROM DEPT_COPY
+WHERE DNO = 20;
+
+-- 2) 10 번 부서의 지역명(LOC) DALLAS 로 수정
+UPDATE DEPT_COPY
+SET
+    LOC = (SELECT LOC FROM DEPT_COPY WHERE DNO = 20)
+WHERE DNO = 10;
+
+-- 데이터 확인
+SELECT * FROM DEPT_COPY;
+-- 확정
+COMMIT;
+
+-- 연습 3) 10 번 부서의 부서명, 지역명을 
+--         30번 부서의 부서명, 지역명으로 변경하기
+-- 힌트) 서브쿼리
+-- 1) 30번 부서의 부서명(DNAME), 지역명(LOC) ?
+SELECT DNAME FROM DEPT_COPY WHERE DNO = 30; -- SALES
+SELECT LOC FROM DEPT_COPY WHERE DNO = 30; -- CHICAGO
+
+-- 2) update 
+UPDATE DEPT_COPY
+SET 
+    DNAME = (SELECT DNAME FROM DEPT_COPY WHERE DNO = 30),
+    LOC   = (SELECT LOC FROM DEPT_COPY WHERE DNO = 30)
+WHERE DNO = 10;
+-- 데이터 확인
+SELECT * FROM DEPT_COPY;
+-- 확정
+COMMIT;
+
+-- 3) UPDATE : 다른 풀이(개선)
+UPDATE DEPT_COPY
+SET 
+    (DNAME, LOC) = (SELECT DNAME, LOC FROM DEPT_COPY WHERE DNO = 30)
+WHERE DNO = 10;
+-- 확정
+COMMIT;
+
+-- *) Delete(삭제) : 부분삭제, 전체삭제, 취소 가능
+-- vs TRUNCATE TABLE 테이블(빠른삭제, 전체삭제)
+
+-- 예제 6) 10번 부서를 삭제하세요
+-- 사용법 
+DELETE FROM DEPT_COPY
+WHERE DNO = 10;
+
+-- 데이터 확인
+SELECT * FROM DEPT_COPY;
+
+-- 확정 
+COMMIT;
+
+-- 연습 1) 20번 부서를 삭제하세요
+DELETE FROM DEPT_COPY
+WHERE DNO = 20;
+
+-- 데이터 확인
+SELECT * FROM DEPT_COPY;
+
+-- 확정 
+COMMIT;
+
+-- 예제 7) 영업부에(SALES) 에 근무하는 사원(부서번호:DNO) 삭제하기
+-- 1) 영업부에(SALES) 에 해당하는 부서번호를 찾고 : 30
+SELECT DNO FROM DEPT_COPY WHERE DNAME = 'SALES';
+
+-- 2) 30 번 부서를 삭제하기
+DELETE DEPT_COPY
+WHERE DNO = (SELECT DNO FROM DEPT_COPY WHERE DNAME = 'SALES');
+
+-- 데이터 확인
+SELECT * FROM DEPT_COPY;
+
+-- 확정
+COMMIT;
+
+-- (참고) 테이블 구조 명령어 : 컬럼, 자료형 등을 볼수 있음
+-- 사용법) DESC 테이블명;
+DESC DEPT_COPY;
