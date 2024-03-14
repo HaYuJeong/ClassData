@@ -68,4 +68,58 @@ public class DeptService {
 
         return list;
     }
+
+    /**
+     * DB 상세조회 : 1건(객체 1개)
+     * @param dno(부서번호)
+     * @return 부서 객체
+     */
+
+//    DB 상세 조회 : 부서 테이블 dno로 조회
+    public Dept findById(long dno){     // public : 접근제한자, findById : 함수, Dept : 리턴 자료형, long dno : 매개변수
+        // Dept : 클래스(객체)도 자료형. 클래스를 넣은 자료형. 부서객체를 변수로 dept로 두기
+        // TODO: DB 상세조회(1건 = 객체 1개) 함수 호출
+        //          상세조회 : 기본키로 조회하는 것을 의미
+        Dept dept = deptDao.selectById(dno);
+        // 부서번호 : 기본키(PK). 조회시 1건만 나옴. 그래서 배열이 필요없음. 객체 1개를 변수로.
+        return dept;
+    }
+
+    /**
+     * 부서정보 저장하는 함수
+     * @param dept(새로운 부서 객체)
+     * @return 부서 배열(새로운 부서가 포함된 배열)
+     */
+    public List<Dept> save(Dept dept){
+//        TODO: 프론트 전달 값 : dname(부서명), loc(부서위치)
+//         [참고] dno(부서번호) : 자동생성(DB에서는 시퀀스 사용. 나중에 시퀀스 사용할거라 심각하게 보지말기)
+//         1) dept 객체의 dno가 null이면 자동 생성하기
+//         2) dept 부서 테이블의 전체 건수를 구한 후 : 4건(10, 20, 30, 40)
+//              - (4 + 1) * 10 = 50
+//         3) dept 의 setter 함수(속성을 수정/저장하는 함수)
+//              - dept.setDno(50)
+//         4) 이 값을 DB에 저장
+//              - deptDao.insert(Dao);
+
+        List<Dept> list = null;         // 1. 하나 만들기
+        if(dept.getDno() == null) {
+//            TODO: 부서 추가
+//            1) dept 객체의 dno가 null이면 자동 생성하기
+//            2) dept 부서 테이블의 전체 건수 구하기(배열이라서 배열의 크기를 알려주는 함수 사용)
+//              List/ArrayList 배열크기 함수 : .size()
+            int count = deptDao.selectAll().size();
+//            3) 새로운 번호 : (크기 + 1) * 10
+            int newNum = (count + 1) * 10;
+//            4) dept 의 setter 함수
+            dept.setDno(newNum);
+            //        TODO: DB 저장함수 (insert 함수) // 2. insert를 이 안에 넣기
+            list = deptDao.insert(dept); // 저장된 객체 dept를 list라는 변수에 저장
+        }
+        else{
+//            TODO: 부서 수정(update)
+            //        TODO: DB 저장함수 (insert 함수) // 3. update를 이 안에 넣기
+            list = deptDao.update(dept); // 저장된 객체 dept를 list라는 변수에 저장
+        }
+        return list;
+    }
 }

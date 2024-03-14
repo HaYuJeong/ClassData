@@ -46,6 +46,10 @@
         </c:forEach>
         </tbody>
     </table>
+    <%--     TODO: 추가 버튼을 추가 : a href="이동페이지주소" 태그 사용 --%>
+    <div class="text-center">
+        <a href="/exam01/member/addition" class="btn btn-primary">추가</a>
+    </div>
 </div>
 <%-- 꼬리말 --%>
 <jsp:include page="../../common/footer.jsp" />
