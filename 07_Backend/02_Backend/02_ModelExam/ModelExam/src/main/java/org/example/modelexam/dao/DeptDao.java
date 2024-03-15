@@ -54,6 +54,10 @@ public class DeptDao {
 
         List<Dept> list = sampleData.getList();
 
+        int count = selectAll().size(); // 전체 건수
+        int newId = (count + 1) * 10;
+        dept.setDno(newId); // 새로운 번호 저장
+
         list.add(dept);
 
         sampleData.setList(list);

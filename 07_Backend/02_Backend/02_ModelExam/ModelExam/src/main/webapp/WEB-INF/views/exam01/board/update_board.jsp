@@ -1,8 +1,8 @@
 <%--
   Created by IntelliJ IDEA.
   User: hayj6
-  Date: 2024-03-14(014)
-  Time: 오후 5:01
+  Date: 2024-03-15(015)
+  Time: 오후 7:45
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
@@ -14,38 +14,33 @@
 <body>
 <%-- 머리말 --%>
 <jsp:include page="../../common/header.jsp"/>
-<%-- 본문 : 수정/추가 : form/input 태그 이용 --%>
-<%-- insert : post 방식   : @PostMapping --%>
-<%-- update : put 방식    : @PutMapping (최근에 나와서 밑에 직접 추가해줘야 함)--%>
-<%-- delete : delete 방식 : @DeleteMapping (최근에 나와서 밑에 직접 추가해줘야 함)--%>
-<%-- select : get 방식    : @GetMapping --%>
+
 <div class="container">
     <%--    수정 form--%>
-    <form action="/exam01/dept/edit/${dept.dno}" method="post">
+    <form action="/exam01/board/edit/${board.id}" method="post">
         <%--            TODO: 아래 input(hidden) 사용하면 put 방식으로 전송됨 --%>
         <input type="hidden" name="_method" value="put"/>
-        <%--            TODO: 상세조회 값을 input 태그에 출력 : value=값 --%>
         <%--            TODO: 부서번호(기본키) 숨김 : 수정불가 --%>
-        <input type="hidden" name="dno" value="${dept.dno}"/>
-        <%--        부서명  입력 양식 --%>
+        <input type="hidden" name="id" value="${board.id}"/>
+        <%--        제목 입력 양식 --%>
         <div class="mb-3">
-            <label for="dname" class="form-label">dname</label>
+            <label for="title" class="form-label">title</label>
             <input type="text"
                    class="form-control"
-                   id="dname"
-                   name="dname"
-                   value="${dept.dname}"
-                   placeholder="부서명입력">
+                   id="title"
+                   name="title"
+                   value="${board.title}"
+                   placeholder="제목입력">
         </div>
-        <%--        부서위치 입력 양식 --%>
+        <%--        내용 입력 양식 --%>
         <div class="mb-3">
-            <label for="loc" class="form-label">loc</label>
+            <label for="content" class="form-label">content</label>
             <input type="text"
                    class="form-control"
-                   id="loc"
-                   name="loc"
-                   value="${dept.loc}"
-                   placeholder="부서위치입력">
+                   id="content"
+                   name="content"
+                   value="${board.content}"
+                   placeholder="내용입력">
         </div>
         <%--            수정 버튼 --%>
         <div class="mb-3">
@@ -53,7 +48,7 @@
         </div>
     </form>
     <%--    삭제 form --%>
-    <form action="/exam01/dept/delete/${dept.dno}" method="post">
+    <form action="/exam01/board/delete/${board.id}" method="post">
         <%--        delete 방식은 아래 input 태그가 필요함 --%>
         <input type="hidden" name="_method" value="delete"/>
         <%--        삭제 버튼 추가 : submit --%>

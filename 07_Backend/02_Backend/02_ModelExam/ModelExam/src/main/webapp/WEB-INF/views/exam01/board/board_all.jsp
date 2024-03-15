@@ -1,12 +1,11 @@
 <%--
   Created by IntelliJ IDEA.
   User: hayj6
-  Date: 2024-03-13
-  Time: 오후 4:13
+  Date: 2024-03-15(015)
+  Time: 오후 2:40
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%--TODO: jstl 표현식 사용을 위한 import : 반복문/조건문 등 사용 --%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <html>
 <head>
@@ -20,39 +19,36 @@
 <jsp:include page="../../common/header.jsp" />
 <%-- 본문 --%>
 <div class="container">
-    <h2>전체 조회 : 연습</h2>
+    <h2>전체 조회</h2>
     <p>${list}</p>
 
-<%--        부트스트랩 테이블 --%>
+    <%--        부트스트랩 테이블 --%>
     <table class="table">
         <thead>
         <tr>
-            <th scope="col">eno</th>
-            <th scope="col">ename</th>
-            <th scope="col">job</th>
-            <th scope="col">manager</th>
+            <th scope="col">id</th>
+            <th scope="col">title</th>
+            <th scope="col">content</th>
         </tr>
         </thead>
         <tbody>
-<%--            JSP 반복문(jstl 표현식 import 하기) : <c:forEach var="변수" items="${배열}"> --%>
+        <%--            JSP 반복문(jstl 표현식 import 하기) : <c:forEach var="변수" items="${배열}"> --%>
         <c:forEach var="data" items="${list}">
             <tr>
-<%--                td : 컬럼이랑 같다고 생각--%>
                 <td>
-<%--                    TODO: 부서번호(dno) 클릭하면 수정페이지 열기--%>
-                <a href="/exam01/member/edition/${data.eno}">${data.eno}</a>
-                </td>
-                <td>${data.ename}</td>
-                <td>${data.job}</td>
-                <td>${data.manager}</td>
+                        <a href="/exam01/board/edition/${data.id}">${data.id}</td></a>
+                <td>${data.title}</td>
+                <td>${data.content}</td>
             </tr>
         </c:forEach>
         </tbody>
     </table>
+
     <%--     TODO: 추가 버튼을 추가 : a href="이동페이지주소" 태그 사용 --%>
     <div class="text-center">
-        <a href="/exam01/member/addition" class="btn btn-primary">추가</a>
+        <a href="/exam01/board/addition" class="btn btn-primary">추가</a>
     </div>
+
 </div>
 <%-- 꼬리말 --%>
 <jsp:include page="../../common/footer.jsp" />

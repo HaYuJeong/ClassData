@@ -1,7 +1,7 @@
 package org.example.modelexam.dao;
 
-import org.example.modelexam.model.Board;
-import org.example.modelexam.testdata.SampleBoard;
+import org.example.modelexam.model.Faq;
+import org.example.modelexam.testdata.SampleFaq;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -21,63 +21,63 @@ import java.util.List;
  * 2022/10/15         kangtaegyung          최초 생성
  */
 @Repository
-public class BoardDao {
+public class FaqDao {
 
     @Autowired
-    SampleBoard sampleBoard; // 스프링부트 컨테이너에서 샘플 데이터 객체 하나 가져오기
+    SampleFaq sampleFaq; // 스프링부트 컨테이너에서 샘플 데이터 객체 하나 가져오기
 
     //    모든 샘를 데이터 조회 함수
-    public List<Board> selectAll() {
-        List<Board> list = sampleBoard.getList();
+    public List<Faq> selectAll() {
+        List<Faq> list = sampleFaq.getList();
 
         return list;
     }
 
     //    아이디로 조회하는 함수
-    public Board selectById(int id) {
-        List<Board> list = sampleBoard.getList();
+    public Faq selectById(int id) {
+        List<Faq> list = sampleFaq.getList();
 
-        Board resBoard = null;
+        Faq resFaq = null;
 
 //        id에 해당하는 값 찾기
-        for (Board board : list) {
-            if(board.getId() == id) {
-                resBoard = board;
+        for (Faq faq : list) {
+            if(faq.getFno() == id) {
+                resFaq = faq;
             }
         }
 
-        return resBoard;
+        return resFaq;
     }
 
 //    데이터를 저장하는 함수
-    public List<Board> insert(Board board) {
+    public List<Faq> insert(Faq faq) {
 
-        List<Board> list = sampleBoard.getList();
+        List<Faq> list = sampleFaq.getList();
 
         int count = selectAll().size(); // 전체 건수
         int newId = count + 1;
-        board.setId(newId); // 새로운 번호 저장
+        faq.setFno(newId); // 새로운 번호 저장
 
-        list.add(board);
+        list.add(faq);
 
-        sampleBoard.setList(list);
+        sampleFaq.setList(list);
 
-        return sampleBoard.getList();
+        return sampleFaq.getList();
     }
 
 //    데이터를 수정하는 함수
-    public List<Board> update(Board board) {
+    public List<Faq> update(Faq faq) {
 
-        List<Board> list = sampleBoard.getList();
+        List<Faq> list = sampleFaq.getList();
 
-        if(board.getId() != null) {
+        if(faq.getFno() != null) {
             //            수정
-            for (Board element : list) {
-                if ((int)element.getId() == (int)board.getId()) {
-                    element.setId(board.getId());
-                    element.setTitle(board.getTitle());
-                    element.setContent(board.getContent());
-                    element.setUpdateTime(board.getUpdateTime());
+            for (Faq element : list) {
+                if ((int)element.getFno() == (int)faq.getFno()) {
+                    element.setFno(faq.getFno());
+                    element.setSubject(faq.getSubject());
+                    element.setText(faq.getText());
+                    element.setUpdateTime(faq.getUpdateTime());
                 }
             }
         }
@@ -87,10 +87,10 @@ public class BoardDao {
 
 //  데이터를 삭제하는 함수
     public int deleteById(int id) {
-        List<Board> list = sampleBoard.getList();
+        List<Faq> list = sampleFaq.getList();
 
         for (int i = 0; i < list.size(); i++) {
-            if (list.get(i).getId() == id) {
+            if (list.get(i).getFno() == id) {
                 list.remove(i);
                 return 1;
             }

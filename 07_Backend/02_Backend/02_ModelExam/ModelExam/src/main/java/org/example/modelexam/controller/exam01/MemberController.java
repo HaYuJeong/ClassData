@@ -75,12 +75,52 @@ public class MemberController {
     }
 
 //    TODO: 수정 페이지 열기 함수
+//     => 상세조회 1번 해서 화면에 출력해야함 => 그 정보를 수정할 수 있음
     @GetMapping("/member/edition/{eno}")
     public String editMember(@PathVariable long eno,
                              Model model){
+//        TODO: 1) 사원번호로(eno) 상세조회
         Member member = memberService.findById(eno);
-
+//        TODO: 2) 사원 객체 를 jsp 로 전달
         model.addAttribute("member", member);
+
         return "exam01/member/update_member.jsp";
+    }
+    //  todo: 연습 5)
+//    MemberService 클래스를 만들고 save() 함수를 정의하고 update 하세요
+//    MemberController 클래스를 만들어서 editMember() 함수를 정의
+//    editMember(), updateMember() 정의하세요
+//    - url : /member/edition/{eno}
+//    - jsp : exam01/member/update_member.jsp
+//    - url 테스트 : http://localhost:8000/exam01/member/edition/7369
+//    updateMember()
+//    - url : /member/edit/{eno}
+//    - redirect url : /exam01/member
+
+//    TODO: 수정 버튼 클릭 시 실행될 함수
+//      => 전체 조회페이지로 강제이동
+//     update -> put 방식 : @PutMapping
+//     update ~ where 조건식 : /member/edit/{eno}
+    @PutMapping("/member/edit/{eno}")
+    public RedirectView updateMember(@PathVariable int eno,
+                                     @ModelAttribute Member member){
+//        TODO: DB 수정(서비스함수) 실행
+        memberService.save(member);
+
+//        TODO: 전체 조회 페이지로 강제이동 : RedirectView
+        return new RedirectView("/exam01/member");
+    }
+
+//    TODO: sql delete -> delete 방식 -> @DeleteMapping
+//     - url : /member/delete/{eno}
+//     - redirect url : /exam01/member
+//     - 클래스 == 자료형
+    @DeleteMapping("/member/delete/{eno}")
+    public RedirectView deleteMember(@PathVariable int eno){
+//        TODO: 삭제 서비스 함수(removeById) 실행
+        memberService.removeById(eno);
+
+//        TODO: 전체 조회 페이지로 강제 이동 : /exam01/member
+        return new RedirectView("/exam01/member");
     }
 }

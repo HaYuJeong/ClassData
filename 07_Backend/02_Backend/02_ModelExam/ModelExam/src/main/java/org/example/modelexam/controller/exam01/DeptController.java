@@ -133,6 +133,34 @@ public class DeptController {
 //     url : dept/edition/{dno}
 //     jsp : exam01/dept/update_dept.jsp
 
-
 //    TODO: 수정 버튼 클릭시 실행될 함수
+//     => 수정 후 전체조회 페이지로 강제 이동
+//     = 사용법) new RedirectView("/이동할url")
+//     => 클래스 == 자료형
+//     => update는 put 방식 => 어노테이션은 @PutMapping("/url")
+//     => SQL 에서 update ~ where 조건절 썼음(아니면 모든 데이터가 수정됨)
+//                ex) where 부서번호 = 20 (보통 기본키로 조건을 둠)
+//     => url : /dept/edit/{dno}
+    @PutMapping("/dept/edit/{dno}")
+    public RedirectView updateDept(@PathVariable long dno,
+                                   @ModelAttribute Dept dept){   // 객체를 받아서 jsp로 전달
+                                                                // Model model은 값을 받아서 jsp로 전달
+//          TODO: 수정 함수(서비스) 호출
+//              => save : if(insert) else(update)가 있음 : 부서번호 null이면 insert, null 아니면 update
+        deptService.save(dept);
+//          TODO: 전체 조회 페이지로 강제 이동 : /exam01/dept
+        return new RedirectView("/exam01/dept");
+    }
+
+//    TODO: sql delete -> delete 방식 -> @DeleteMapping
+//     => sql delete ~ where 조건식 (dno = 10)
+//     => url : /dept/delete/{dno}
+//     => 삭제 후 전체조회 페이지로 강제이동
+    @DeleteMapping("/dept/delete/{dno}")    // 조건에 해당하는것만 삭제하는 조건달기
+    public RedirectView deleteDept(@PathVariable int dno){
+//      TODO: DB 삭제 함수 실행(DeptService에 만들어져있음)
+        deptService.removeById(dno);
+//        TODO: 삭제 후 전체조회 페이지로 강제 이동
+        return new RedirectView("/exam01/dept");
+    }
 }

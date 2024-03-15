@@ -54,6 +54,10 @@ public class MemberDao {
 
         List<Member> list = sampleMember.getList();
 
+        int count = selectAll().size(); // 전체 건수
+        int newId = count + 8000;
+        member.setEno(newId); // 새로운 번호 저장
+
         list.add(member);
 
         sampleMember.setList(list);
