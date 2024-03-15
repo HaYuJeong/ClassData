@@ -122,19 +122,4 @@ public class DeptService {
         }
         return list;
     }
-
-    /**
-     * 부서번호(dno)로 삭제하는 함수
-     * @param dno(부서번호가 매개변수)
-     * @return 참/거짓
-     */
-//    1건만 삭제
-    public boolean removeById(int dno){
-//        TODO: DB 삭제 함수 실행 : 삭제가 몇건됐는지 건수 확인
-//         => 삭제 후 return 값은 삭제한 개수가 나옴
-        int count = deptDao.deleteById(dno);
-
-//        return 값은 3항연산자 사용(if문은 너무 김)
-        return (count > 0)? true : false;   // 삭제는 무조건 1건 이상. 삭제되면 true, 삭제가 하나도 안되면 false
-    }
 }

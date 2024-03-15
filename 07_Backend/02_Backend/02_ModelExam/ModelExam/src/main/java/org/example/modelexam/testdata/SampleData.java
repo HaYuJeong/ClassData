@@ -1,8 +1,8 @@
 package org.example.modelexam.testdata;
 
+import org.example.modelexam.model.Dept;
 import lombok.Getter;
 import lombok.Setter;
-import org.example.modelexam.model.Dept;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;

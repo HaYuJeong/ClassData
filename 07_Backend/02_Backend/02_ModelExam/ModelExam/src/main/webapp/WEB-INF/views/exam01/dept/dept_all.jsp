@@ -38,12 +38,7 @@
             <%--            JSP 반복문(jstl 표현식 import 하기) : <c:forEach var="변수" items="${배열}"> --%>
             <c:forEach var="data" items="${list}">
                 <tr>
-<%--                    테이블 행--%>
-<%--                    TODO: 부서번호(dno) 클릭하면 수정페이지 열기--%>
-<%--                     url : /exam01/dept/edition/부서번호--%>
-                    <td>
-                         <a href="/exam01/dept/edition/${data.dno}">${data.dno}</a>
-                    </td>
+                    <td>${data.dno}</td>
                     <td>${data.dname}</td>
                     <td>${data.loc}</td>
                 </tr>

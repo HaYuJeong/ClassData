@@ -20,10 +20,10 @@ import lombok.*;
 @ToString
 @NoArgsConstructor
 public class Member extends BaseTimeEntity {
-    private Integer eno;
-    private String ename;
-    private String job;
-    private Integer manager;
+    private Integer eno;        // 사원번호
+    private String ename;       // 사원명
+    private String job;         // 직위
+    private Integer manager;    // 관리자 사원번호
 
     @Builder
     public Member(Integer eno, String ename, String job, Integer manager) {

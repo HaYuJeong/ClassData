@@ -17,14 +17,13 @@
 
 <%-- 본문 : 수정/추가 : form/input 태그 이용 --%>
 <div class="container">
-<%--    수정 form--%>
-    <form action="/exam01/member/edit/${member.eno}" method="post">
+    <form action="" method="post">
         <%--            TODO: 아래 input(hidden) 사용하면 put 방식으로 전송됨 --%>
         <input type="hidden" name="_method" value="put"/>
         <%--            TODO: 상세조회 값을 input 태그에 출력 : value=값 --%>
         <%--            TODO: 부서번호(기본키) 숨김 : 수정불가 --%>
         <input type="hidden" name="eno" value="${member.eno}"/>
-        <%--        사원명(ename)  입력 양식 --%>
+        <%--        ename  입력 양식 --%>
         <div class="mb-3">
             <label for="ename" class="form-label">ename</label>
             <input type="text"
@@ -32,9 +31,9 @@
                    id="ename"
                    name="ename"
                    value="${member.ename}"
-                   placeholder="사원명입력">
+                   placeholder="부서명입력">
         </div>
-        <%--        직위(job) 입력 양식 --%>
+        <%--        job 입력 양식 --%>
         <div class="mb-3">
             <label for="job" class="form-label">job</label>
             <input type="text"
@@ -42,9 +41,9 @@
                    id="job"
                    name="job"
                    value="${member.job}"
-                   placeholder="직위입력">
+                   placeholder="부서위치입력">
         </div>
-        <%--       관리자사원번호(manager) 입력 양식 --%>
+        <%--       manager 입력 양식 --%>
         <div class="mb-3">
             <label for="manager" class="form-label">manager</label>
             <input type="text"
@@ -52,19 +51,13 @@
                    id="manager"
                    name="manager"
                    value="${member.manager}"
-                   placeholder="관리자사원번호입력">
+                   placeholder="부서위치입력">
         </div>
         <%--            수정 버튼 --%>
         <div class="mb-3">
             <button type="submit" class="btn btn-warning">수정</button>
         </div>
     </form>
-<%--    삭제 form--%>
-    <form action="/exam01/member/delete/${member.eno}" method="post">
-<%--        delete 방식은 아래 input 태그가 필요함--%>
-        <input type="hidden" name="_method" value="delete" />
-<%--        삭제 버튼 추가 : submit --%>
-    <button type="submit" class="btn btn-danger">삭제</button>
 </div>
 
 <%-- 꼬리말 --%>

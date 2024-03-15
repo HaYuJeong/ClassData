@@ -20,8 +20,7 @@
 <%-- delete : delete 방식 : @DeleteMapping (최근에 나와서 밑에 직접 추가해줘야 함)--%>
 <%-- select : get 방식    : @GetMapping --%>
 <div class="container">
-    <%--    수정 form--%>
-    <form action="/exam01/dept/edit/${dept.dno}" method="post">
+    <form action="" method="post">
         <%--            TODO: 아래 input(hidden) 사용하면 put 방식으로 전송됨 --%>
         <input type="hidden" name="_method" value="put"/>
         <%--            TODO: 상세조회 값을 input 태그에 출력 : value=값 --%>
@@ -38,28 +37,21 @@
                    placeholder="부서명입력">
         </div>
         <%--        부서위치 입력 양식 --%>
-        <div class="mb-3">
-            <label for="loc" class="form-label">loc</label>
-            <input type="text"
-                   class="form-control"
-                   id="loc"
-                   name="loc"
-                   value="${dept.loc}"
-                   placeholder="부서위치입력">
-        </div>
+            <div class="mb-3">
+                <label for="loc" class="form-label">loc</label>
+                <input type="text"
+                       class="form-control"
+                       id="loc"
+                       name="loc"
+                       value="${dept.loc}"
+                       placeholder="부서위치입력">
+            </div>
         <%--            수정 버튼 --%>
-        <div class="mb-3">
-            <button type="submit" class="btn btn-warning">수정</button>
-        </div>
+            <div class="mb-3">
+                <button type="submit" class="btn btn-warning">수정</button>
+            </div>
     </form>
-    <%--    삭제 form --%>
-    <form action="/exam01/dept/delete/${dept.dno}" method="post">
-        <%--        delete 방식은 아래 input 태그가 필요함 --%>
-        <input type="hidden" name="_method" value="delete"/>
-        <%--        삭제 버튼 추가 : submit --%>
-        <button type="submit" class="btn btn-danger">삭제</button>
 </div>
-
 <%-- 꼬리말 --%>
 <jsp:include page="../../common/footer.jsp"/>
 </body>

@@ -38,10 +38,7 @@
         <c:forEach var="data" items="${list}">
             <tr>
 <%--                td : 컬럼이랑 같다고 생각--%>
-                <td>
-<%--                    TODO: 부서번호(dno) 클릭하면 수정페이지 열기--%>
-                <a href="/exam01/member/edition/${data.eno}">${data.eno}</a>
-                </td>
+                <td>${data.eno}</td>
                 <td>${data.ename}</td>
                 <td>${data.job}</td>
                 <td>${data.manager}</td>

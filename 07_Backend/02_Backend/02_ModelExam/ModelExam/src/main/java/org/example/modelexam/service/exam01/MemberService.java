@@ -103,18 +103,4 @@ public class MemberService {    // @Service 적으면 스프링이 MemberService
         }
         return list;
     }
-
-    //  todo: 연습 6)
-//    MemberService 클래스를 만들고 removeById() 함수를 정의한다.
-//    MemberController 클래스를 만들어서 deleteMember() 함수를 정의
-//    update_member.jsp 삭제버튼과 url 를 추가한다.
-//    - url : /member/delete/{eno}
-//    - redirect url : /exam01/member
-    public boolean removeById(int eno){
-//      TODO: DB 삭제 실행
-//        => return : 삭제된 건수
-        int count = memberDao.deleteById(eno);
-//      TODO: count > 0 이면 삭제 잘 됐음, 아니면 삭제 안됐음
-        return (count > 0)? true : false;
-    }
 }
