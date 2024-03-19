@@ -36,7 +36,7 @@
         <c:forEach var="data" items="${list}">
             <tr>
                 <td>
-                        <a href="/exam01/board/edition/${data.id}">${data.id}</td></a>
+                        <a href="/exam01/board/edition/${data.id}">${data.id}</a></td>
                 <td>${data.title}</td>
                 <td>${data.content}</td>
             </tr>

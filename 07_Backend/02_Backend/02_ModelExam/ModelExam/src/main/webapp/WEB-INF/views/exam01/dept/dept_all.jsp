@@ -29,16 +29,17 @@
         <table class="table">
             <thead>
             <tr>
-                <th scope="col">dno</th>
-                <th scope="col">dname</th>
-                <th scope="col">loc</th>
+                <th scope="col">fno</th>
+                <th scope="col">subject</th>
+                <th scope="col">text</th>
             </tr>
             </thead>
             <tbody>
             <%--            JSP 반복문(jstl 표현식 import 하기) : <c:forEach var="변수" items="${배열}"> --%>
             <c:forEach var="data" items="${list}">
                 <tr>
-                    <td>${data.dno}</td>
+                    <td>
+                        <a href="/exam01/dept/edition/${data.dno}">${data.dno}</a></td>
                     <td>${data.dname}</td>
                     <td>${data.loc}</td>
                 </tr>

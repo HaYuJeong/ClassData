@@ -27,7 +27,7 @@ public class BoardDao {
     @Autowired
     SampleBoard sampleBoard; // 스프링부트 컨테이너에서 샘플 데이터 객체 하나 가져오기
 
-    //    모든 샘를 데이터 조회 함수
+    //    모든 샘플 데이터 조회 함수
     public List<Board> selectAll() {
         List<Board> list = sampleBoard.getList();
 

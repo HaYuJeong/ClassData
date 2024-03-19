@@ -122,4 +122,10 @@ public class DeptService {
         }
         return list;
     }
+
+    //    삭제 함수
+    public boolean removeById(int id){
+        int count = deptDao.deleteById(id);
+        return (count > 0)? true : false;
+    }
 }

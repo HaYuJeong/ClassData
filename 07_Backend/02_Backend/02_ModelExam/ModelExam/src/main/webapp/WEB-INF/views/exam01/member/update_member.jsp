@@ -17,7 +17,7 @@
 
 <%-- 본문 : 수정/추가 : form/input 태그 이용 --%>
 <div class="container">
-    <form action="" method="post">
+    <form action="/exam01/member/edit/${member.eno}" method="post">
         <%--            TODO: 아래 input(hidden) 사용하면 put 방식으로 전송됨 --%>
         <input type="hidden" name="_method" value="put"/>
         <%--            TODO: 상세조회 값을 input 태그에 출력 : value=값 --%>
@@ -57,6 +57,13 @@
         <div class="mb-3">
             <button type="submit" class="btn btn-warning">수정</button>
         </div>
+    </form>
+
+    <%--    삭제 form--%>
+    <form action="/exam01/member/delete/${member.eno}" method="post">
+        <input type="hidden" name="_method" value="delete"/>
+        <%--            삭제 버튼 --%>
+        <button type="submit" class="btn btn-danger">삭제</button>
     </form>
 </div>
 

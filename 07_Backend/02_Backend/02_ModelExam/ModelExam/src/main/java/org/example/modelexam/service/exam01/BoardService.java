@@ -5,6 +5,9 @@ import org.example.modelexam.model.Board;
 import org.example.modelexam.model.Dept;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 
@@ -89,6 +92,10 @@ List<Board> list = null;
 //    updateBoard()
 //    - url : /board/edit/{id}
 //    - redirect url : /exam01/board
+//    editBoard() : 수정페이지 열기 함수
+//    - url : /board/edition/{id}
+//    - jsp : exam01/board/update_board.jsp
+
 
 //    삭제 함수
     public boolean removeById(int id){

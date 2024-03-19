@@ -17,7 +17,7 @@
 
 <%--본문 : 부트스트랩 테이블 --%>
 <div>
-<table class="table">
+<table class="table table-warning table-striped">
     <thead>
     <tr>
         <th scope="col">dno</th>
