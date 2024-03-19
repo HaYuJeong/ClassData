@@ -84,25 +84,6 @@ public class MemberController {
 
 //        TODO: 2) 사원 객체를 jsp로 전달
         model.addAttribute("member", member);
-
         return "exam01/member/update_member.jsp";
-    }
-
-//    TODO: 수정 버튼 누르면 나오는 페이지
-    @PutMapping("/member/edit/{eno}")
-    public RedirectView updateMember(@PathVariable long eno,
-                                     @ModelAttribute Member member) {
-        memberService.save(member);
-
-        return new RedirectView("/exam01/member");
-    }
-
-    @DeleteMapping("/member/delete/{eno}")
-    public RedirectView deleteDept(@PathVariable int eno) {
-
-        //      TODO: DB 삭제 함수 실행
-        memberService.removeById(eno);
-//        TODO: 삭제 후 전체조회 페이지로 강제 이동
-        return new RedirectView("/exam01/member");
     }
 }

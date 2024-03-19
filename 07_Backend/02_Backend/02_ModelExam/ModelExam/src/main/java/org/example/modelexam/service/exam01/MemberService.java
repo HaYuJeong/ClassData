@@ -103,9 +103,4 @@ public class MemberService {    // @Service 적으면 스프링이 MemberService
         }
         return list;
     }
-
-    public boolean removeById(int id){
-        int count = memberDao.deleteById(id);
-        return (count > 0)? true : false;
-    }
 }

@@ -1,7 +1,6 @@
 package org.example.modelexam.controller.exam01;
 
 import lombok.extern.slf4j.Slf4j;
-import org.example.modelexam.model.Board;
 import org.example.modelexam.model.Dept;
 import org.example.modelexam.service.exam01.DeptService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +35,7 @@ import java.util.List;
  *                 2) log.debug("변수명 : " + 변수값);
  *                    cf) (정보 많이 출력) trace > debug > info (정보 작게 출력)
  *                    ex) log.trace(), log.debug(), log.info()
- *
+
  *
  * <p>
  * ===========================================================
@@ -56,11 +55,10 @@ public class DeptController {
     /**
      * 전체 조회 함수
      * http://localhost:8000/공통url/함수url -> http://localhost:8000/exam01/dept
-     *
      * @return exam01/dept/dept_all.jsp
      */
     @GetMapping("/dept")
-    public String getDeptAll(Model model) {  // controller 함수 getDeptAll. 여기에 접근
+    public String getDeptAll(Model model){  // controller 함수 getDeptAll. 여기에 접근
 
 //        TODO: Service 객체의 전체조회 함수를 호출
         List<Dept> list = deptService.findAll();
@@ -77,13 +75,13 @@ public class DeptController {
         return "exam01/dept/dept_all.jsp";
     }
 
-    //    상세조회 : 기본키(매개변수:부서번호(dno)를 웹브라우저 주소창에 입력해서 전달받기 (requestParam, Pathvariable)
+//    상세조회 : 기본키(매개변수:부서번호(dno)를 웹브라우저 주소창에 입력해서 전달받기 (requestParam, Pathvariable)
 //    url 테스트 : http://localhost:8000/exam01/dept/10
 //    jsp : exam01/dept/dept_id.jsp
 //    url : /dept/{dno}
     @GetMapping("/dept/{dno}")
     public String getDeptId(@PathVariable long dno,
-                            Model model) {
+                            Model model){
 //        TODO: service의 상세조회 함수(findById) 호출
         Dept dept = deptService.findById(dno); // 전체조회하는 deptService의 findbyId 함수
 //        TODO: jsp로 dept(부서) 객체 전송
@@ -92,15 +90,15 @@ public class DeptController {
         return "exam01/dept/dept_id.jsp";
     }
 
-    //    TODO : 부서 추가 페이지 열기 함수 #1
+//    TODO : 부서 추가 페이지 열기 함수 #1
 //     jsp : exam01/dept/add_dept.jsp
 //     url : /dept/addition
     @GetMapping("/dept/addition")
-    public String addDept() {
+    public String addDept(){
         return "exam01/dept/add_dept.jsp";
     }
 
-    //    TODO : 저장 버튼 클릭시 실행 될 함수 #2 : 저장 버튼 누르면 전체 조회 페이지로 강제 이동
+//    TODO : 저장 버튼 클릭시 실행 될 함수 #2 : 저장 버튼 누르면 전체 조회 페이지로 강제 이동
 //     전체 조회 페이지의 jsp 주소 : /exam01/dept
 //     url : /dept/add
 //     http : form 방식 : insert는 post 방식
@@ -108,10 +106,10 @@ public class DeptController {
 //     cf) select -> @GetMapping
     @PostMapping("/dept/add")
     public RedirectView createDept(     // RedirectView 는 createDept 라는 함수의 자료형(클래스)
-                                        @ModelAttribute Dept dept   // 객체를 사용하는 어노테이션 @ModelAttribute
+            @ModelAttribute Dept dept   // 객체를 사용하는 어노테이션 @ModelAttribute
                                         // Dept 객체에 dname, loc가 있어야함
                                         // 컨트롤러 함수도 같은 객체가 있어야 함
-    ) {
+    ){
 //        TODO: DB 저장 함수 실행
         deptService.save(dept);
 
@@ -121,38 +119,20 @@ public class DeptController {
         return new RedirectView("/exam01/dept");
     }
 
-    //    TODO: 수정 페이지 열기 함수
+//    TODO: 수정 페이지 열기 함수
 //      => 수정 페이지가 열릴 때 상세 조회한 결과를 수정함
     @GetMapping("/dept/edition/{dno}")
-    public String editDept(@PathVariable long dno,
-                           Model model) {
+        public String editDept(@PathVariable long dno,
+                               Model model){
 //        TODO: 1) 먼저 상세조회를 함 : 1건 나와서 배열 필요없이 객체만 있으면 됨
-        Dept dept = deptService.findById(dno);
+            Dept dept = deptService.findById(dno);
 //        TODO: 2) 부서 객체를 jsp로 전송
-        model.addAttribute("dept", dept);
-        return "exam01/dept/update_dept.jsp";
-    }
+            model.addAttribute("dept", dept);
+            return "exam01/dept/update_dept.jsp";
+        }
 //     url : dept/edition/{dno}
 //     jsp : exam01/dept/update_dept.jsp
 
 
 //    TODO: 수정 버튼 클릭시 실행될 함수
-    @PutMapping("/dept/edit/{dno}")
-    public RedirectView updateDept(@PathVariable int dno,
-                                    @ModelAttribute Dept dept) {
-//        TODO: 수정 서비스 함수 실행
-        deptService.save(dept);
-//        TODO: 전체 조회 페이지로 강제 이동
-        return new RedirectView("/exam01/dept");
-    }
-
-//    삭제 버튼 누르면 전체 페이지로 강제 이동
-    @DeleteMapping("/dept/delete/{dno}")
-    public RedirectView deleteDept(@PathVariable int dno) {
-
-        //      TODO: DB 삭제 함수 실행
-        deptService.removeById(dno);
-//        TODO: 삭제 후 전체조회 페이지로 강제 이동
-        return new RedirectView("/exam01/dept");
-    }
 }
