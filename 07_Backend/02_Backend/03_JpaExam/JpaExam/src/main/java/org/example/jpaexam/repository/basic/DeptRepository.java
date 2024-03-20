@@ -22,7 +22,7 @@ import org.springframework.stereotype.Repository;
          * => 기본키 속성의 자료형 : 엔티티 클래스의 기본키 속성의 자료형을 명시
          * => JPA 기본 함수 사용 가능
          * - findAll()         : 전체 조회, 자동 sql 문 생성
-         * - findByid()        : 상세 조회(1건), 자동 sql 문 생성
+         * - findById()        : 상세 조회(1건), 자동 sql 문 생성
          * - save(객체)         : 저장/수정을 알아서 실행함
          * 저장 : 기본키가 없으면 insert
          * 수정 : 기본키가 있으면 update
@@ -49,7 +49,7 @@ public interface DeptRepository extends JpaRepository<Dept, Integer> {
 //          - ex) 속성 : 현재페이지번호, 전체페이지건수 등
 //    pageable    객체 : 페이징하기 위한 객체(함수의 매개변수로 사용)
     @Query(value = "SELECT D.* FROM TB_DEPT D\n" +
-            "WHERE D.DNAME LIKE '%'|| :dname ||'%'"
+            "WHERE D.DNAME LIKE upper('%'|| :dname ||'%')"
             , countQuery = "SELECT count(*) FROM TB_DEPT D\n" +
             "WHERE D.DNAME LIKE '%'|| :dname ||'%'"
             , nativeQuery = true)

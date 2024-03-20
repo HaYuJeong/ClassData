@@ -17,7 +17,7 @@
 </head>
 <body>
 <%--부트스트렙 메뉴--%>
-<nav class="navbar navbar-expand-lg bg-light" >
+<nav class="navbar navbar-expand-lg" style="background-color: #e3f2fd;" >
     <div class="container-fluid">
         <%--        1번째 메뉴 : Navbar -> Simple --%>
         <a class="navbar-brand" href="#">
@@ -41,7 +41,7 @@
                     <%--                    소메뉴--%>
                     <ul class="dropdown-menu">
                         <li><a class="dropdown-item" href="/basic/dept">Dept</a></li>
-                        <li><a class="dropdown-item" href="/basic/addition">Add Dept</a></li>
+                        <li><a class="dropdown-item" href="/basic/dept/addition">Add Dept</a></li>
                     </ul>
                 </li>
                 <%--                Emp(사원) --%>

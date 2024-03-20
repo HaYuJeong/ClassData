@@ -24,5 +24,11 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface EmpRepository extends JpaRepository<Emp, Integer> {
-
+//    like 검색 함수 : JPA sql 직접 작성
+    @Query(value = "SELECT E.* FROM TB_EMP E\n" +
+            "WHERE E.ENAME LIKE UPPER('%'|| :ename ||'%')"
+            , countQuery = "SELECT count(*) FROM TB_EMP E\n" +
+            "WHERE E.ENAME LIKE '%'|| :ename ||'%'"
+            , nativeQuery = true)
+    Page<Emp> findAllByEnameContaining(@Param("ename") String ename, Pageable pageable);
 }

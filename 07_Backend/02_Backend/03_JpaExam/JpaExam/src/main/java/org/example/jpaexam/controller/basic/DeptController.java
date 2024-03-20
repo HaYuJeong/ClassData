@@ -10,10 +10,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * packageName : org.example.jpaexam.controller.basic
@@ -45,13 +47,13 @@ public class DeptController {
     @GetMapping("/dept")
     public String getDeptAll(
             @RequestParam(defaultValue = "") String dname,
-            @RequestParam(defaultValue = "0") int page,      // 현재 페이지 번호
-            @RequestParam(defaultValue = "3") int size,      // 한 페이지당 갯수
+            @RequestParam(defaultValue = "0") int page,      // 현재 페이지 번호 : 5
+            @RequestParam(defaultValue = "3") int size,      // 한 페이지당 갯수 : 3
             Model model) {
 //        TODO: 페이징 처리 객체에 값 저장: Pageable
 //              1) 현재 페이지 번호 : page
 //              2) 1페이지 당 개수 : size
-        Pageable pageable = PageRequest.of(page, size);
+        Pageable pageable = PageRequest.of(page, size); // 페이징 처리를 위해 사용되는 메서드
 //        TODO: DB like 검색 서비스 함수 실행 : findAll -> findAllByDnameContaining
         Page<Dept> pageRes = deptService.findAllByDnameContaining(dname, pageable);
 //        Page 객체 : 굉장히 많은 속성이 있음 : 현재페이지번호 등
@@ -67,19 +69,36 @@ public class DeptController {
         model.addAttribute("totalPages", pageRes.getTotalPages());       // 4) 전체 페이지 개수
 
 //        공식 : 블럭 시작페이지 번호 = (Math.floor(현재페이지번호/1페이지당개수)) * 1페이지당개수
-        long blockStartPage = (long) Math.floor((double) (pageRes.getNumber())/size) * size;
+        long blockStartPage = (long) Math.floor((double) (pageRes.getNumber()) / size) * size;
 
         model.addAttribute("startPage", blockStartPage);                  // 5) 블럭 시작페이지번호
-//        공식 : 블럭 끝페이지 번호 = 블럭 시작페이지번호 + 1페이자당개수 - 1
+//        공식 : 블럭 끝페이지 번호 = 블럭 시작페이지번호 + 1페이지당개수 - 1
 //        ex) 52페이지가 있음. 첫 페이지는 50, size는 5. 그럼 55-1=54가 나오는데 그럼 틀림
 //            그래서 3항연산자를 이용해서 -1 을 해줌
         long blockEndPage = blockStartPage + size - 1;
 //        블럭 끝페이지 번호 > 전체 페이지 번호 : 이 경우가 발생할 수 있음
 //        블럭 끝페이지 번호 = 전체 페이지 번호 - 1 (값 보정)
-        blockEndPage = (blockEndPage >= pageRes.getTotalPages())? pageRes.getTotalPages()-1 : blockEndPage;
-
+        blockEndPage = (blockEndPage >= pageRes.getTotalPages()) ? pageRes.getTotalPages() - 1 : blockEndPage;
+//        TODO: blockEndPage < 0 이면(홍길동 검색하면) blockEndPage = 0 고정 : blockEndPage 음수이면 jsp 반복문에서 에러발생(버그 수정)
+        blockEndPage = (blockEndPage < 0) ? 0 : blockEndPage;
 //        model로 보내기
         model.addAttribute("endPage", blockEndPage);
         return "/basic/dept/dept_all.jsp";
+    }
+
+//    상세 조회 : 테스트용(생략)
+    @GetMapping("/dept/{dno}")
+    public String getDeptId(@PathVariable int dno,
+                            Model model){
+//        DB 상세조회 서비스 함수 실행
+        Optional<Dept> optionalDept = deptService.findById(dno);
+//        JSP 객체 전송 : 사용법 : 옵셔널객체.get() : 객체 꺼내기
+        model.addAttribute("dept", optionalDept.get());
+        return "/basic/dept/dept_id.jsp";
+    }
+
+    @GetMapping("/dept/addition")
+    public String addDept(){
+        return "basic/dept/add_dept.jsp";
     }
 }
