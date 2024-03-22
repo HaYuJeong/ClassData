@@ -9,10 +9,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.view.RedirectView;
 
 import java.util.List;
 import java.util.Optional;
@@ -47,8 +45,8 @@ public class DeptController {
     @GetMapping("/dept")
     public String getDeptAll(
             @RequestParam(defaultValue = "") String dname,
-            @RequestParam(defaultValue = "0") int page,      // 현재 페이지 번호 : 5
-            @RequestParam(defaultValue = "3") int size,      // 한 페이지당 갯수 : 3
+            @RequestParam(defaultValue = "0") int page,      // 현재 페이지 번호
+            @RequestParam(defaultValue = "3") int size,      // 한 페이지당 갯수
             Model model) {
 //        TODO: 페이징 처리 객체에 값 저장: Pageable
 //              1) 현재 페이지 번호 : page
@@ -76,7 +74,7 @@ public class DeptController {
 //        ex) 52페이지가 있음. 첫 페이지는 50, size는 5. 그럼 55-1=54가 나오는데 그럼 틀림
 //            그래서 3항연산자를 이용해서 -1 을 해줌
         long blockEndPage = blockStartPage + size - 1;
-//        블럭 끝페이지 번호 > 전체 페이지 번호 : 이 경우가 발생할 수 있음
+//        블럭 끝페이지 번호 >= 전체 페이지 번호 : 이 경우가 발생할 수 있음
 //        블럭 끝페이지 번호 = 전체 페이지 번호 - 1 (값 보정)
         blockEndPage = (blockEndPage >= pageRes.getTotalPages()) ? pageRes.getTotalPages() - 1 : blockEndPage;
 //        TODO: blockEndPage < 0 이면(홍길동 검색하면) blockEndPage = 0 고정 : blockEndPage 음수이면 jsp 반복문에서 에러발생(버그 수정)
@@ -86,10 +84,10 @@ public class DeptController {
         return "/basic/dept/dept_all.jsp";
     }
 
-//    상세 조회 : 테스트용(생략)
+    //    상세 조회 : 테스트용(생략)
     @GetMapping("/dept/{dno}")
     public String getDeptId(@PathVariable int dno,
-                            Model model){
+                            Model model) {
 //        DB 상세조회 서비스 함수 실행
         Optional<Dept> optionalDept = deptService.findById(dno);
 //        JSP 객체 전송 : 사용법 : 옵셔널객체.get() : 객체 꺼내기
@@ -97,8 +95,49 @@ public class DeptController {
         return "/basic/dept/dept_id.jsp";
     }
 
+    //  저장 : 1) 추가(저장) 페이지 열기 함수
     @GetMapping("/dept/addition")
-    public String addDept(){
+    public String addDept() {
         return "basic/dept/add_dept.jsp";
+    }
+
+    //        2) 저장 버튼 클릭 시 실행될 함수 : insert
+//    변수 1개 전달 : @PathVariable, @RequestParam
+//    객체 1개 전달 : @ModelAttribute
+    @PostMapping("/dept/add")
+    public RedirectView createDept(
+            @ModelAttribute Dept dept) {
+//        DB 저장 서비스 함수
+        deptService.save(dept);
+//        전체 조회 페이지 강제이동
+        return new RedirectView("/basic/dept");
+    }
+
+    //    수정 : 1) 수정 페이지 열기 함수
+    @GetMapping("/dept/edition/{dno}")
+    public String editDept(@PathVariable int dno,
+                           Model model) {
+//        서비스 상세조회 함수 호출 : return값 : Optional 객체
+        Optional<Dept> optionalDept = deptService.findById(dno);
+//        옵셔널 객체에서 결과를 꺼내서(부서객체) jsp로 전송
+        model.addAttribute("dept", optionalDept.get());
+        return "/basic/dept/update_dept.jsp";
+    }
+
+    //    2) 수정 버튼 누르면 나오는 함수
+    @PutMapping("/dept/edit/{dno}")
+    public RedirectView updateDept(@PathVariable int dno,
+                                   @ModelAttribute Dept dept) {
+        deptService.save(dept);
+        return new RedirectView("/basic/dept");
+    }
+
+//    삭제 함수
+//    delete -> delete 방식 -> @DeleteMapping
+    @DeleteMapping("/dept/delete/{dno}")
+    public RedirectView deleteDept(@PathVariable int dno){
+//        DB 서비스 삭제 함수 실행
+        deptService.removeById(dno);
+        return new RedirectView("/basic/dept");
     }
 }

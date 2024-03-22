@@ -7,7 +7,6 @@ import jakarta.persistence.PreUpdate;
 import lombok.Getter;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -16,7 +15,7 @@ import java.time.format.DateTimeFormatter;
  * fileName : BaseTimeEntity
  * author : hayj6
  * date : 2024-03-19(019)
- * description : 공통 클래스(공통 속성(컬럼)이 있음)
+ * description : 공통 클래스 : soft delete(소프트 삭제용)
  * 요약 :
  *      @MappedSuperclass
  *      @EntityListeners(AuditingEntityListener.class)
@@ -37,31 +36,34 @@ import java.time.format.DateTimeFormatter;
 @Getter
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
-public abstract class BaseTimeEntity {
-//    생성 일시 컬럼(속성(필드)), 수정일시 컬럼 : 문자열로 만들어놨음(String)
-//    DB 컬럼 명명법(이름짓기) : _ (언더바 표기법 : 단어_단어)
-//    자바 속성 명명법(이름짓기) : 낙타표기법 : 소문자 + 대문자(insert + Time)
-//    => 개선점 : insertTime, updateTime 이 공통컬럼(다른 테이블도 다 가지고 있는 공통 속성)
-//    => 상속 이용 : extends 부모클래스 : 이걸 만들고 상속받는게 효율적임(모든 클래스에서 공통 컬럼 상속 받기)
+public abstract class BaseTimeEntity2 {
+
     private String insertTime;
 
     private String updateTime;
 
-//    TODO: JPA에서 insert가 실행되기 전에 실행하는 함수
-//     ex) OnPrePersist() 함수 실행 후 -> insert 문 실행
+//    TODO: 삭제 여부 필드 : Y(삭제됨) 아니면 N(삭제안됨) 이 나옴 : soft delete 용 필드 == update 문 실행
+//          select * from tb_dept where delete_yn = 'N';  => Y하면 화면에 안보이니 삭제가 된것처럼 보임
+    private String deleteYn;
+
+//    TODO: 삭제 시 시간 필드(soft delete 용)
+    private String deleteTime;
+
     @PrePersist
     void OnPrePersist(){
 //        insert 하기전에 현재날짜를 넣기 : 날짜포맷(yyyy-MM-dd HH:mm:ss)
         this.insertTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
 
+        this.deleteYn = "N";    // 삭제할때만 Y로 바꾸기
     }
 
-//    TODO: JPA에서 update가 실행되기 전에 실행되는 함수
     @PreUpdate
     void OnPreUpdate(){
 //        update 하기전에 현재날짜를 넣기
         this.updateTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
 //        insertTime과 같이 변경 (생성일시 == 수정일시 동일하게 처리)
         this.insertTime = this.updateTime;
+
+        this.deleteYn = "N";
     }
 }

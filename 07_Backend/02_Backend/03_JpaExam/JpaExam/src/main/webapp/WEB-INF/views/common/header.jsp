@@ -17,10 +17,10 @@
 </head>
 <body>
 <%--부트스트렙 메뉴--%>
-<nav class="navbar navbar-expand-lg" style="background-color: #e3f2fd;" >
+<nav class="navbar navbar-expand-lg" style="background-color: #e3f2fd;">
     <div class="container-fluid">
         <%--        1번째 메뉴 : Navbar -> Simple --%>
-        <a class="navbar-brand" href="#">
+        <a class="navbar-brand" href="/">
             <%--            TODO: 이미지 넣기 --%>
             <img src="/resources/img/simple-coding.png" width="20" height="20"/>
             Simple</a>
@@ -54,6 +54,18 @@
                     <ul class="dropdown-menu">
                         <li><a class="dropdown-item" href="/basic/emp">Emp</a></li>
                         <li><a class="dropdown-item" href="/basic/emp/addition">Add Emp</a></li>
+                    </ul>
+                </li>
+                <%--                Faq(사원) --%>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                       aria-expanded="false">
+                        Faq(종합문제)
+                    </a>
+                    <%--                    소메뉴--%>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="/basic/faq">Faq</a></li>
+                        <li><a class="dropdown-item" href="/basic/faq/addition">Add Faq</a></li>
                     </ul>
                 </li>
             </ul>

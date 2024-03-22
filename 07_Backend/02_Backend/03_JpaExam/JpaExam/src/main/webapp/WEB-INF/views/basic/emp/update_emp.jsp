@@ -1,8 +1,8 @@
 <%--
   Created by IntelliJ IDEA.
   User: hayj6
-  Date: 2024-03-20(020)
-  Time: 오후 5:23
+  Date: 2024-03-21(021)
+  Time: 오전 11:21
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
@@ -16,30 +16,27 @@
 
 <div class="container">
     <div>
-        <%--        TODO: 저장(insert - post 방식 - @PostMapping) 버튼 누르면 "/basic/dept/add" url로 감--%>
-        <form action="/basic/emp/add" method="post">
+        <form action="/basic/emp/edit/${emp.eno}" method="post">
+            <input type="hidden" name="_method" value="put"/>
+            <input type="hidden" name="eno" value="${emp.eno}"/>
+
             <div class="mb-3">
                 <label for="ename" class="form-label">ename</label>
                 <input type="ename"
                        class="form-control"
                        id="ename"
                        name="ename"
+                       value="${emp.ename}"
                        placeholder="사원명입력">
             </div>
-            <div class="mb-3">
-                <label for="loc" class="form-label">loc</label>
-                <input type="loc"
-                       class="form-control"
-                       id="loc"
-                       name="loc"
-                       placeholder="부서위치입력">
-            </div>
+
             <div class="mb-3">
                 <label for="job" class="form-label">job</label>
                 <input type="job"
                        class="form-control"
                        id="job"
                        name="job"
+                       value="${emp.job}"
                        placeholder="직위입력">
             </div>
             <div class="mb-3">
@@ -48,6 +45,7 @@
                        class="form-control"
                        id="manager"
                        name="manager"
+                       value="${emp.manager}"
                        placeholder="관리자입력">
             </div>
             <div class="mb-3">
@@ -56,6 +54,7 @@
                        class="form-control"
                        id="hireDate"
                        name="hireDate"
+                       value="${emp.hiredate}"
                        placeholder="입사일입력">
             </div>
             <div class="mb-3">
@@ -64,6 +63,7 @@
                        class="form-control"
                        id="salary"
                        name="salary"
+                       value="${emp.salary}"
                        placeholder="연봉입력">
             </div>
             <div class="mb-3">
@@ -72,12 +72,17 @@
                        class="form-control"
                        id="commission"
                        name="commission"
+                       value="${emp.commission}"
                        placeholder="상여금입력">
             </div>
-            <%--        input 태그 : 저장 버튼 --%>
-            <form class="mb-3 d-flex justify-content-center" action="/emp/add">
-                <button type="submit" class="btn btn-primary mb-3">저장</button>
+            <%--        input 태그 : 수정 버튼 --%>
+            <form class="mb-3 d-flex justify-content-center" action="/emp/edit/{eno}">
+                <button type="submit" class="btn btn-warning mb-3">수정</button>
             </form>
+        </form>
+        <form action="/basic/emp/delete/${emp.eno}" method="post">
+            <input type="hidden" name="_method" value="delete"/>
+            <button type="submit" class="btn btn-danger">삭제</button>
         </form>
     </div>
 </div>

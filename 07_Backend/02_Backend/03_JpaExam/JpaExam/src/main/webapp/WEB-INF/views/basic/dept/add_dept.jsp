@@ -27,7 +27,7 @@
                        name="dname"
                        placeholder="부서명입력">
             </div>
-            <%--        input 태그 : 부서위치 --%>
+                <%--        input 태그 : 부서위치 --%>
                 <div class="mb-3">
                     <label for="loc" class="form-label">loc</label>
                     <input type="loc"
@@ -37,9 +37,9 @@
                            placeholder="부서위치입력">
                 </div>
             <%--        input 태그 : 저장 버튼 --%>
-                <div class="mb-3 d-flex justify-content-center">
+                <form class="mb-3 d-flex justify-content-center" action="/dept/add">
                     <button type="submit" class="btn btn-primary mb-3">저장</button>
-                </div>
+                </form>
         </form>
     </div>
 </div>

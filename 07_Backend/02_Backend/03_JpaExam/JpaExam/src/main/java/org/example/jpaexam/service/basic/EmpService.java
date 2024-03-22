@@ -57,4 +57,13 @@ public class EmpService {
         Emp emp2 = empRepository.save(emp);
         return emp2;
     }
+
+    public boolean removeById(int eno){
+        if (empRepository.existsById(eno) == true){
+            empRepository.deleteById(eno);
+                    return true;
+        } else{
+            return false;
+        }
+    }
 }
