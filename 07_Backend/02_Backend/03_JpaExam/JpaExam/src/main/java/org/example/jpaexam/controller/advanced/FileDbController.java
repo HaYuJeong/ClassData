@@ -8,12 +8,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.view.RedirectView;
 
 /**
  * packageName : org.example.jpaexam.controller.advanced
@@ -76,4 +78,64 @@ public class FileDbController {
         return "advanced/fileDb/fileDb_all.jsp";
     }
 
+//    저장 : 1) 저장(추가) 페이지 열기 함수
+    @GetMapping("/fileDb/addition")
+    public String addFileDb(){
+        return "advanced/fileDb/add_fileDb.jsp";
+    }
+
+//          2) 저장 버튼 클릭시(파일 업로드) 실행될 함수
+//          insert -> post 방식 -> @PostMapping
+//          파일업로드 : 쿼리스트링 : @RequestParam 사용
+    @PostMapping("/fileDb/add")
+    public RedirectView createFileDb(
+        @RequestParam(defaultValue = "") String fileTitle,
+        @RequestParam(defaultValue = "") String fileContent,
+        @RequestParam MultipartFile image       // 파일 전송 : MultipartFile
+        ){
+        try{
+//            DB 저장 서비스 함수 실행 : insert 시 uuid 없음(null)
+            fileDbService.save(null, fileTitle, fileContent, image);
+        } catch(Exception e){
+            log.debug(e.getMessage());
+        }
+        return new RedirectView("/advanced/fileDb");
+    }
+
+//           3) 파일 다운로드 함수 : url(/fileDb/{uuid})
+//              => jsp(프론트엔드) 에서 파일 다운로드 url 클릭 또는 img 태그 넣으면
+//                 이 함수에서 실제적으로 파일을 전송해줌
+//              => return 값 : jsp 페이지가 아닌 json 데이터로 전송함 : 그 어노테이션이 @ResponseBody
+//              => http://localhost:8000/advanced/fildDb/xxxxx
+//              TODO: @ResponseBody : json 데이터로 리턴할 때 사용하는 어노테이션
+//              TODO: ResponseEntity : jsp(vue 등) 로 전송할 때 신호와 함께 보내는 클래스
+//                   -> 신호 : 클라이언트(vue, jsp 등) <-- ok(성공, 200,), notfound(실패, 404) --> 서버(spring)
+    @GetMapping("/fileDb/{uuid}")
+    @ResponseBody
+    public ResponseEntity<byte[]> findDownload(@PathVariable String uuid){
+//        DB 상세 조회 서비스 함수 실행 : uuid
+        FileDb fileDb = fileDbService.findById(uuid).get();
+//        jsp 전송 : json 형태로 전송(js 객체형태)
+        return ResponseEntity.ok()
+//              파일 전송 :
+//                          헤더 :
+//                          1) 파일형태   : CONTENT_DISPOSITION
+//                          2) 첨부파일명 : attachment; filename="xxx.jpg"
+//                          바디 : 실제 이미지파일 데이터
+                .header(HttpHeaders.CONTENT_DISPOSITION,
+                        "attachment; filename=\"" + fileDb.getFileName() + "\"")
+                .body(fileDb.getFileData());        // 실제 이미지 전송
+    }
+
+    //    삭제 함수 : 기본키(uuid)
+//    delete -> delete 방식 -> @DeleteMapping
+    @DeleteMapping("/fileDb/delete/{uuid}")
+    public RedirectView deleteFileDb(
+            @PathVariable String uuid
+    ) {
+//        DB 삭제 서비스 실행
+        fileDbService.removeById(uuid);
+//        jsp 전체 조회 페이지 강제 이동
+        return new RedirectView("/advanced/fileDb");
+    }
 }

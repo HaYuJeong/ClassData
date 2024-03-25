@@ -68,6 +68,30 @@
                         <li><a class="dropdown-item" href="/basic/faq/addition">Add Faq</a></li>
                     </ul>
                 </li>
+                <%--                FileDb #4 --%>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                       aria-expanded="false">
+                        FileDb
+                    </a>
+                    <%--                    소메뉴--%>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="/advanced/fileDb">FileDb</a></li>
+                        <li><a class="dropdown-item" href="/advanced/fileDb/addition">Add FileDb</a></li>
+                    </ul>
+                </li>
+                    <%--                FileDb #4 --%>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                           aria-expanded="false">
+                            Gallery
+                        </a>
+                        <%--                    소메뉴--%>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="/advanced/gallery">Gallery</a></li>
+                            <li><a class="dropdown-item" href="/advanced/gallery/addition">Add Gallery</a></li>
+                        </ul>
+                    </li>
             </ul>
         </div>
     </div>

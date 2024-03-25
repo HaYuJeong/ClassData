@@ -23,11 +23,16 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface FileDbRepository extends JpaRepository<FileDb, String> {
-//  제목(title) like 검색 : @Query(
+//   제목(title) like 검색 : @Query()
+//   TODO: soft delete : 삭제하지 않고 화면에만 안보이게 하는 것
+//         DELETE_YN = 'N'(조회시) => @Where() : JPA에서 사용(JPQL만 사용. 우리는 오라클 쿼리 사용중
+//                                => nativeQuery = true(오라클 sql)
     @Query(value="SELECT * FROM TB_FILE_DB\n" +
-            "WHERE FILE_TITLE LIKE '%%'"
+            "WHERE FILE_TITLE LIKE '%'|| :fileTitle ||'%'" +
+            "AND DELETE_YN = 'N'"
             , countQuery="SELECT * FROM TB_FILE_DB\n" +
-            "WHERE FILE_TITLE LIKE '%%'"
+            "WHERE FILE_TITLE LIKE '%'|| :fileTitle ||'%'" +
+            "AND DELETE_YN = 'N'"
             , nativeQuery=true)
     Page<FileDb> findAllByFileTitleContaining(
             @Param("fileTitle") String fileTitle,
