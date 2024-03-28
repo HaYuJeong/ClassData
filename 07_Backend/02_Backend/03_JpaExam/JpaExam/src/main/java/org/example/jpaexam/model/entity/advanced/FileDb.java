@@ -69,7 +69,10 @@ import org.hibernate.annotations.Where;
 @ToString
 // soft delete jpa 어노테이션
 @Where(clause="DELETE_YN = 'N'")
-@SQLDelete(sql="UPDATE TB_FILE_DB SET DELETE_YN = 'Y', DELETE_TIME=TO_CHAR(SYSDATE, 'YYYY-MM-DD HH24:MI:SS') WHERE UUID = ?")
+@SQLDelete(sql="UPDATE TB_FILE_DB " +
+               "SET DELETE_YN = 'Y'" +
+               ", DELETE_TIME=TO_CHAR(SYSDATE, 'YYYY-MM-DD HH24:MI:SS') " +
+               "WHERE UUID = ?")
 public class FileDb extends BaseTimeEntity2 {
 
 //    TB_FILE_DB : 컬럼과 일치하게 속성 작성
@@ -87,6 +90,6 @@ public class FileDb extends BaseTimeEntity2 {
     private String fileName;    // 업로드 파일명
 
     @Lob
-    private byte[] fileData;    // 이미지 저장 속성(필드)
+    private byte[] fileData;    // 업로드 이미지
     private String fileUrl;     // 이미지 다운로드 url
 }

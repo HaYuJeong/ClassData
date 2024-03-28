@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.view.RedirectView;
 
+import java.util.Optional;
+
 /**
  * packageName : org.example.jpaexam.controller.advanced
  * fileName : FileDbController
@@ -136,6 +138,40 @@ public class FileDbController {
 //        DB 삭제 서비스 실행
         fileDbService.removeById(uuid);
 //        jsp 전체 조회 페이지 강제 이동
+        return new RedirectView("/advanced/fileDb");
+    }
+
+//    수정 : 1) 수정 페이지 열기 : 상세 조회 +
+//          2) 수정 버튼 클릭 시 update 함수 실행
+    @GetMapping("/fileDb/edition/{uuid}")
+    public String editFileDb(
+            @PathVariable String uuid,
+            Model model
+    ) {
+//        1) 상세 조회
+        Optional<FileDb> optionalFileDb = fileDbService.findById(uuid);
+
+//        2) 결과 jsp 전달
+        model.addAttribute("fileDb", optionalFileDb.get());
+        return "advanced/fileDb/update_fileDb.jsp";
+    }
+
+//    2) 수정 버튼 클릭 시 update 함수
+//    update -> put 방식 -> @PutMapping
+    @PutMapping("/fileDb/edit/{uuid}")
+    public RedirectView updateFileDb(
+            @PathVariable String uuid,
+            @RequestParam(defaultValue = "") String fileTitle,
+            @RequestParam(defaultValue = "") String fileContent,
+            @RequestParam MultipartFile image
+    ){
+        try{
+//            DB 수정 : save()
+            fileDbService.save(uuid, fileTitle, fileContent, image);        // 추가할때는 uuid가 없어서 null, 수정할떄는 기본키가 있으니 uuid로 작성
+        } catch(Exception e){
+            log.debug(e.getMessage());
+        }
+//        강제 이동
         return new RedirectView("/advanced/fileDb");
     }
 }

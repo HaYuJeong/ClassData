@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.view.RedirectView;
 
+import java.util.Optional;
+
 /**
  * packageName : org.example.jpaexam.controller.advanced
  * fileName : GalleryController
@@ -123,6 +125,28 @@ public class GalleryController {
 //        DB 삭제 서비스 실행
         galleryService.removeById(uuid);
 //        jsp 전체 조회 페이지 강제 이동
+        return new RedirectView("/advanced/gallery");
+    }
+
+//    수정 : 1) 수정 페이지 열기 함수 : 상세 조회
+    @GetMapping("/gallery/edition/{uuid}")
+    public String editGallery(@PathVariable String uuid, Model model){
+        Optional<Gallery> optionalGallery = galleryService.findById(uuid);
+        model.addAttribute("gallery", optionalGallery.get());
+        return "advanced/gallery/update_gallery.jsp";
+    }
+
+//    2) 수정 버튼 클릭 시 update 함수 실행
+    @PutMapping("/gallery/edit/{uuid}")
+    public RedirectView updateGallery(
+            @PathVariable String uuid,
+            @RequestParam(defaultValue = "") String galleryTitle,
+            @RequestParam MultipartFile image){
+        try{
+            galleryService.save(uuid, galleryTitle, image);
+        } catch(Exception e){
+            log.debug(e.getMessage());
+        }
         return new RedirectView("/advanced/gallery");
     }
 }

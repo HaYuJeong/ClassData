@@ -66,7 +66,7 @@ public class FileDbService {
 //               TODO: 1-2) 파일 다운로드 url 생성 : 자바함수 (ServletUriComponentBuilder)
                 String fileDownload = ServletUriComponentsBuilder
                         .fromCurrentContextPath()      // spring 서버기본주소 : http://localhost:8000
-                        .path("/advanced/fileDb/")      // 추가 경로 넣기      : /advanced/fileDb/
+                        .path("/advanced/fileDb/")     // 추가 경로 넣기      : /advanced/fileDb/
                         .path(tmpUuid)                 // uuid 넣기          : xxxxxx
                         .toUriString();                // 합치기              : http://localhost:8000/advanced/fileDb/xxxxxx
 
@@ -81,6 +81,23 @@ public class FileDbService {
                 fileDb2 = fileDbRepository.save(fileDb);    // DB 저장
             } else {
                 //  TODO: update : 기본키(uuid)가 있으면
+//                      1-1) uuid 생성(생략) : 기본키가 있기 때문에 생성하지 않아도 됨
+//                      1-2) 파일 다운로드 url 생성 :
+                String fileDownload = ServletUriComponentsBuilder
+                        .fromCurrentContextPath()
+                        .path("/advanced/fileDb/")
+                        .path(uuid)
+                        .toUriString();     // 합치기 : http://localhost:8000/advanced/fileDb/xxxxxx
+//                TODO: 1-3) FileDb 객체 생성(생성자, setter)
+                FileDb fileDb = new FileDb(
+                        uuid,                           // 기존 uuid
+                        fileTitle,                      // 제목
+                        fileContent,                    // 내용
+                        file.getOriginalFilename(),     // 업로드 할때의 파일명
+                        file.getBytes(),                // 실제 업로드 이미지
+                        fileDownload                    // 파일 다운로드 url
+                );
+                fileDb2 = fileDbRepository.save(fileDb);    // DB 저장
             }
         } catch (Exception e) {
             log.debug(e.getMessage());
