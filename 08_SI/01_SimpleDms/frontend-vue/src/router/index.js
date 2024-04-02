@@ -5,7 +5,12 @@ const routes = [
   // 부서
   {
     path: '/',
+    alias: "/dept", // 별명을 하나 더 줄수 있음(추가 url)
     component: () => import('../views/basic/dept/DeptList.vue')
+  },
+  {
+    path: '/emp',
+    component: () => import('../views/basic/emp/EmpList.vue')
   }
 ]
 
