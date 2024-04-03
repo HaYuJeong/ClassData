@@ -9,9 +9,9 @@
           type="text"
           class="form-control"
           placeholder="사원명 검색"
-          v-model="searchDname"
+          v-model="searchEname"
         />
-        <button class="btn btn-outline-secondary" type="button">Search</button>
+        <button class="btn btn-outline-secondary" type="button" @click="retrieveEmp">Search</button>
       </div>
     </div>
 
@@ -21,7 +21,7 @@
       <div class="col-12 w-25 mb-3">
         1페이지당 개수 :
         <!-- 복습 : v-model="pageSize" : 화면에 보일 초기값이 지정됨 -->
-        <select class="form-select form-select-sm" v-model="pageSize">
+        <select class="form-select form-select-sm" v-model="pageSize" @change="pageSizeChange">
           <!-- TODO: vue 반복문 실행 -->
           <option v-for="(data, index) in pageSizes" :key="index" :value="data">
             {{ data }}
@@ -33,6 +33,7 @@
         v-model="page"
         :total-rows="count"
         :per-page="pageSize"
+        @click="retrieveEmp"
       ></b-pagination>
     </div>
 
@@ -57,6 +58,7 @@
           <tbody>
             <!-- TODO: 반복문 -->
             <tr v-for="(data, index) in emp" :key="index">
+              <td>{{ data.eno }}</td>
               <td>{{ data.ename }}</td>
               <td>{{ data.job }}</td>
               <td>{{ data.manager }}</td>
@@ -64,10 +66,11 @@
               <td>{{ data.salary }}</td>
               <td>{{ data.commission }}</td>
               <td>{{ data.dno }}</td>
-              <td>{{ data.action }}</td>
               <!-- 수정페이지 링크 버튼 -->
               <td>
+                
                 <span class="badge rounded-pill text-bg-info">수정</span>
+                
               </td>
             </tr>
           </tbody>
@@ -85,7 +88,7 @@ export default {
   // TODO: data binding 속성 정의
   data() {
     return {
-      dept: [], // spring으로 전송할 변수(속성)
+      emp: [], // spring으로 전송할 변수(속성)
       searchEname: "", // 부서명 검색 변수(속성)(input 태그와 바인딩)
 
       // 공통 속성(현재페이지, 전체데이터개수, 1페이지당개수)

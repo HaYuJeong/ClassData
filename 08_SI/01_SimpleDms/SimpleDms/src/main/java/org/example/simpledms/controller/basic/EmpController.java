@@ -11,10 +11,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -80,6 +77,21 @@ public class EmpController {
 //            Not Found 404 : 프론트 에러
 //            서버가 두 대이기 때문에, 에러가 날 때 프론트인지 백엔드인지 잘 확인해야함. alert통해서 값이 출력되는지 확인
 //            통신 에러 : axios.Error
+        }
+    }
+
+    //   TODO: 저장 함수 : 1) 저장페이지 열기 함수(jsp:x) => 뷰 자체 디자인 실행(o)
+//    TODO: 저장 함수 : 2) 저장버튼(뷰) 클릭시 실행될 함수
+    @PostMapping("/emp")
+    public ResponseEntity<Object> create(
+            @RequestBody Emp emp
+    ){
+        try {
+            Emp emp2 = empService.save(emp);
+
+            return new ResponseEntity<>(emp2, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }

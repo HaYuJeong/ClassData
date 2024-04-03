@@ -10,13 +10,12 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.HttpMediaTypeNotSupportedException;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * packageName : org.example.simpledms.controller.basic
@@ -34,6 +33,11 @@ import java.util.Map;
  *              => 위의 규칙대로 작성된 프로그램(==애플리케이션)
  *              => Restful Application
  *          3) Rest API(함수) 용어 : (관례) @RestController 로 제작된 벡엔드
+ *          4) ResponseEntity : 데이터 또는 신호를 전달하게 해주는 클래스
+ *             => 신호 종류 : 성공(OK:200), 데이터없음(NO_CONTENT:203)
+ *                      서버에러(INTERNAL_SERVER_ERROR:500) 등
+ *             => 프론트가 벡엔드의 상황을 알수 있고 디버깅 용이 등 품질이 좋아짐
+ *          5) @RequestBody : @ModelAttribute 와 유사하게 객체를 전달받는 어노테이션
  * <p>
  * ===========================================================
  * DATE            AUTHOR             NOTE
@@ -88,6 +92,42 @@ public class DeptController {
 //            Not Found 404 : 프론트 에러
 //            서버가 두 대이기 때문에, 에러가 날 때 프론트인지 백엔드인지 잘 확인해야함. alert통해서 값이 출력되는지 확인
 //            통신 에러 : axios.Error
+        }
+    }
+
+//    TODO: 저장 함수
+    @PostMapping("/dept")
+    public ResponseEntity<Object> create(   // 데이터를 넣어서 프론트로 보냄. 품질향상에 좋은 클래스
+           @RequestBody Dept dept           // @Restcontroller 을 쓰니까 json 파일로 넘어감
+    ){
+        try{
+            Dept dept2 = deptService.save(dept);                // DB 서비스 저장 함수 실행
+            return new ResponseEntity<>(dept2, HttpStatus.OK);  // 성공했으니까 OK 보내기(안보내도 상관없음)
+        } catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);   // 500 에러 전송
+        }
+    }
+
+    //    TODO: 상세 조회 함수
+    @GetMapping("/dept/{dno}")
+    public ResponseEntity<Object> findById(
+            @PathVariable int dno
+    ) {
+        try {
+//            TODO: DB 상세조회 서비스 함수 실행
+            Optional<Dept> optionalDept = deptService.findById(dno);
+
+            if(optionalDept.isEmpty() == true) {
+//                데이터 없음(203)
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            } else {
+//                데이터 있음(200)
+                return new ResponseEntity<>(optionalDept.get()
+                        , HttpStatus.OK);
+            }
+
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }

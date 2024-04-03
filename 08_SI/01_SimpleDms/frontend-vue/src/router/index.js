@@ -9,8 +9,21 @@ const routes = [
     component: () => import('../views/basic/dept/DeptList.vue')
   },
   {
+    path: '/add-dept',
+    component: () => import('../views/basic/dept/AddDept.vue')
+  },
+  {
+    // TODO: 사용법 - path: "/dept/:변수명"
+    path: '/dept/:dno',
+    component: () => import('../views/basic/dept/DeptDetail.vue')
+  },
+  {
     path: '/emp',
     component: () => import('../views/basic/emp/EmpList.vue')
+  },
+  {
+    path: '/add-emp',
+    component: () => import('../views/basic/emp/AddEmp.vue')
   }
 ]
 

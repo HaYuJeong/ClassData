@@ -12,7 +12,24 @@ class DeptService {
             // => http://localhost:8000/api + /basic/dept?dname=SALES&page=0&size=3
             // => http://localhost:8000/api/basic/dept?dname=SALES&page=0&size=3
         return http.get(`/basic/dept?dname=${dname}&page=${page}&size=${size}`);
-    }   
+    }
+    // TODO: 추가(insert) 함수 -> post 방식 -> @PostMapping
+    create(data) {
+        // TODO: 사용법 : http.post("컨트롤러함수url", 생성할객체)
+        return http.post("/basic/dept", data);
+    } 
+    // TODO: 상세조회 함수 : 부서번호(dno)
+    // TODO: 조회(select) -> get 방식 -> @GetMapping
+    get(dno) {
+        // TODO: 사용법 : http.get(`/컨트롤러함수url/${부서번호}`)
+        return http.get(`/basic/dept/${dno}`);
+    }
+    // TODO: 수정함수 : 부서번호(dno), 수정할 객체(data)
+    update(dno, data){
+        // TODO: 수정(update) -> put 방식 -> @PutMapping
+        // TODO: 사용법 : http.put(`컨트롤러함수url/${dno}`, 수정할객체)
+        return http.put(`/basic/dept/${dno}`, data);
+    }
 }
 
 // 내보내기 : 다른 js 에서 사용하기 위해

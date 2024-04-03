@@ -13,7 +13,9 @@
           placeholder="부서명 검색"
           v-model="searchDname"
         />
-        <button class="btn btn-outline-secondary" type="button">Button</button>
+        <button class="btn btn-outline-secondary" 
+                type="button"
+                @click="retrieveDept">검색</button>
       </div>
     </div>
 
@@ -23,7 +25,9 @@
       <div class="col-12 w-25 mb-3">
         1페이지당 개수 :
         <!-- 복습 : v-model="pageSize" : 화면에 보일 초기값이 지정됨 -->
-        <select class="form-select form-select-sm" v-model="pageSize">
+        <select class="form-select form-select-sm" 
+                v-model="pageSize"
+                @change="pageSizeChange">
           <!-- TODO: vue 반복문 실행 -->
           <option v-for="(data, index) in pageSizes" :key="index" :value="data">
             {{ data }}
@@ -46,6 +50,7 @@
         v-model="page"
         :total-rows="count"
         :per-page="pageSize"
+        @click="retrieveDept"
       ></b-pagination>
     </div>
 
@@ -65,11 +70,16 @@
           <tbody>
             <!-- TODO: 반복문 -->
             <tr v-for="(data, index) in dept" :key="index">
+              <td>{{ data.dno }}</td>
               <td>{{ data.dname }}</td>
               <td>{{ data.loc }}</td>
               <!-- 수정페이지 링크 버튼 -->
               <td>
+                <!-- TODO: 링크 : a 태그(전체 새로고침(성능저하) -> 페이지전환) -->
+                <!-- TODO: 뷰에서 제공하는 링크 : router-link (부분만 새로고침 : 성능향상) -->
+                <router-link :to="'/dept/' + data.dno">
                 <span class="badge rounded-pill text-bg-success">수정</span>
+                </router-link>
               </td>
             </tr>
           </tbody>
@@ -93,7 +103,7 @@ export default {
 
       // 공통 속성(현재페이지, 전체데이터개수, 1페이지당개수)
       page: 1, // 현재페이지번호(아무것도 없을 시 1로 저장)
-      count: 4, // 전체데이터개수
+      count: 3, // 전체데이터개수
       pageSize: 3, // 1페이지당개수(select 태그와 바인딩)
 
       pageSizes: [3, 6, 9], // 1페이지당개수를 보여줄 배열(select 태그 - option과 바인딩)
@@ -103,12 +113,14 @@ export default {
   methods: {
     // 공통 함수 : 페이징 관련 함수들
     // TODO: 페이지번호 변경 클릭 시 실행될 함수
+    // TODO: b-pagination 태그와 연결
     pageNoChange(value) {
       // this.속성 => data() 안의 속성들 접근
       this.page = value; // 1) 현재 페이지 변경
       this.retrieveDept(); // 2) 재조회 요청
     },
     // TODO: select 박스 변경 시 실행될 함수
+    // TODO: select 태그와 연결
     pageSizeChange() {
       // TODO: js : event.target.value : 화면에서 선택 또는 클릭한 값
     //   this.pageSize = event.target.value; // 1) 화면 값을 페이지 크기 변수에 저장
@@ -144,10 +156,10 @@ export default {
     },
   },
 //   TODO: 화면에 뜰 때 자동 실행되는 함수
-    mounted(){
-        // TODO: 최초 화면이 뜰 때 전체조회 실행
-        this.retrieveDept();
-    }
+  mounted(){
+       // TODO: 최초 화면이 뜰 때 전체조회 실행
+       this.retrieveDept();
+   }
 };
 </script>
 
