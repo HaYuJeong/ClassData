@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * packageName : org.example.simpledms.controller.basic
@@ -91,6 +92,65 @@ public class EmpController {
 
             return new ResponseEntity<>(emp2, HttpStatus.OK);
         } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+//    TODO: 상세조회 함수
+    @GetMapping("/emp/{eno}")
+    public ResponseEntity<Object> findById(
+            @PathVariable int eno
+    ){
+        try {
+            Optional<Emp> optionalEmp = empService.findById(eno);
+
+            if (optionalEmp.isEmpty()) {
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            } else {
+                return new ResponseEntity<>(optionalEmp.get(), HttpStatus.OK);
+            }
+        } catch(Exception e){
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    //    TODO: 수정 함수 : 수정 페이지 열기 함수       (x) : vue 제작
+//    TODO: 수정 함수 : 수정 버튼 클릭시 실행될 함수
+//       수정(update) -> put 방식 -> @PutMapping
+    @PutMapping("/emp/{eno}")
+    public ResponseEntity<Object> update(
+            @PathVariable int eno,
+            @RequestBody Emp emp
+    ) {
+        try {
+            Emp emp2 = empService.save(emp);  // 수정한 값을 emp2 변수에 담음
+
+            return new ResponseEntity<>(emp2, HttpStatus.OK);
+            // 수정한 값을 우리가 보고싶기 때문에 dept2 변수에 담아서 보려고 하는 것
+            // 사실 수정한 값은 전체조회 페이지에서 보기때문에, 우리가 따로 볼 필요가 없어서 dept2는 프론트에서 쓰지는 않음.
+        } catch (Exception e) {
+//            DB 에러 (서버 에러) -> 500 신호(INTERNAL_SERVER_ERROR)
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR); // 에러났다는건 우리가 볼 필요가 없으니 프론트에 신호만 보냄
+        }
+    }
+
+    @DeleteMapping("/emp/deletion/{eno}")
+//    vue 와 spring 은, jsp 와 spring 처럼 같은 프로그램에서 쓰는게 아니라서 서로 통신을 해야한다.
+//    서로 json 파일로 통신해야하는데 그러기 위해서는 ResponseEntity 클래스(객체)를 사용해야한다.
+//    어떤 객체를 써야할지 모를 때는 조상 객체 Object 를 사용하면 된다. 모든 객체는 이 조상 객체를 상속받고 있음
+//    deleteEmp 라는 함수는 매개변수가 eno이다.
+//    empService의 removeById 의 매개변수에 eno를 쓰기 위해 @PathVariable int eno 를 쓴것
+//    삭제하고 나서는 프론트에 값을 보낼 필요가 없어서 신호만 보내는 것
+//    데이터가 있으면 OK 신호, 없으면 NO_CONTENT 신호, 에러가 나면 INTERNAL_SERVER_ERROR 신호를 보냄
+    public ResponseEntity<Object> deleteEmp(@PathVariable int eno){
+        try {
+            boolean result = empService.removeById(eno);
+            if (result) {
+                return new ResponseEntity<>(HttpStatus.OK);
+            }else{
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            }
+
+        }catch (Exception e){
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }

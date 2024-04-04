@@ -68,9 +68,9 @@
               <td>{{ data.dno }}</td>
               <!-- 수정페이지 링크 버튼 -->
               <td>
-                
+                <router-link :to="'/emp/' + data.eno">
                 <span class="badge rounded-pill text-bg-info">수정</span>
-                
+                </router-link>
               </td>
             </tr>
           </tbody>

@@ -52,14 +52,14 @@ public class DeptController {
     @Autowired
     DeptService deptService;    // DI
 
-//    TODO: 전체 조회 함수 + 검색 + 페이징
+    //    TODO: 전체 조회 함수 + 검색 + 페이징
     @GetMapping("/dept")
     public ResponseEntity<Object> findAll(
             @RequestParam(defaultValue = "") String dname,
             @RequestParam(defaultValue = "0") int page,      // 현재페이지
             @RequestParam(defaultValue = "3") int size       // 페이지 갯수
-    ){
-        try{
+    ) {
+        try {
 //            매개변수(page, size) 페이징 변수에 저장
 //            page : 현재페이지번호, size : 한페이지당개수
             Pageable pageable = PageRequest.of(page, size);
@@ -76,14 +76,14 @@ public class DeptController {
 //            TODO: 1) pageList 값이 없으면 : DB 테이블 없음 => NO_CONTENT(203)
 //                  2) pageList 값이 있으면 : 성공 => OK(200)
 //            성공했는데 데이터가 없는 것. 그래서 catch 쪽으로 날라가는게 아니다.
-            if(pageList.isEmpty() == true){
+            if (pageList.isEmpty() == true) {
 //               1) pageList 값이 없으면 : DB 테이블 없음  => NO_CONTENT(203)
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT); // 데이터가 없으면 response를 보낼필요가 없음
             } else {
                 return new ResponseEntity<>(response, HttpStatus.OK);
             }
 
-        } catch(Exception e){
+        } catch (Exception e) {
 //            TODO: INTERNAL_SERVER_ERROR(500) : 백엔드 서버 에러
 //                  아래 코드는 프론트(웹 브라우저)로 신호(500)를 보냄
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -95,15 +95,15 @@ public class DeptController {
         }
     }
 
-//    TODO: 저장 함수
+    //    TODO: 저장 함수
     @PostMapping("/dept")
     public ResponseEntity<Object> create(   // 데이터를 넣어서 프론트로 보냄. 품질향상에 좋은 클래스
-           @RequestBody Dept dept           // @Restcontroller 을 쓰니까 json 파일로 넘어감
-    ){
-        try{
+                                            @RequestBody Dept dept           // @Restcontroller 을 쓰니까 json 파일로 넘어감
+    ) {
+        try {
             Dept dept2 = deptService.save(dept);                // DB 서비스 저장 함수 실행
             return new ResponseEntity<>(dept2, HttpStatus.OK);  // 성공했으니까 OK 보내기(안보내도 상관없음)
-        } catch (Exception e){
+        } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);   // 500 에러 전송
         }
     }
@@ -117,7 +117,7 @@ public class DeptController {
 //            TODO: DB 상세조회 서비스 함수 실행
             Optional<Dept> optionalDept = deptService.findById(dno);
 
-            if(optionalDept.isEmpty() == true) {
+            if (optionalDept.isEmpty() == true) {
 //                데이터 없음(203)
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             } else {
@@ -128,6 +128,45 @@ public class DeptController {
 
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    //    TODO: 수정 함수 : 수정 페이지 열기 함수       (x) : vue 제작
+//    TODO: 수정 함수 : 수정 버튼 클릭시 실행될 함수
+//       수정(update) -> put 방식 -> @PutMapping
+    @PutMapping("/dept/{dno}")
+    public ResponseEntity<Object> update(
+            @PathVariable int dno,
+            @RequestBody Dept dept
+    ) {
+        try {
+            Dept dept2 = deptService.save(dept);  // 수정한 값을 dept2 변수에 담음
+
+            return new ResponseEntity<>(dept2, HttpStatus.OK);
+            // 수정한 값을 우리가 보고싶기 때문에 dept2 변수에 담아서 보려고 하는 것
+            // 사실 수정한 값은 전체조회 페이지에서 보기때문에, 우리가 따로 볼 필요가 없어서 dept2는 프론트에서 쓰지는 않음.
+        } catch (Exception e) {
+//            DB 에러 (서버 에러) -> 500 신호(INTERNAL_SERVER_ERROR)
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR); // 에러났다는건 우리가 볼 필요가 없으니 프론트에 신호만 보냄
+        }
+    }
+
+    // TODO: 삭제 함수
+    @DeleteMapping("/dept/deletion/{dno}")
+    public ResponseEntity<Object> delete(
+            @PathVariable int dno
+    ) {
+        try {
+//            DB 서비스 삭제 함수 실행
+            boolean success = deptService.removeById(dno);
+//            success 여부에 따라 신호 다르게 보내기
+            if(success == true){
+                return new ResponseEntity<>(HttpStatus.OK); // 삭제하고나면 데이터가 없어서 프론트에 보내줄 데이터가 없음으로 그냥 OK 만 보내기
+            } else{
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT); // 서버에러가 아님, 삭제를 실행했으나 삭제가 0건 됨(삭제할 데이터가 없어서)
+            }
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);  // 500 에러 전송
         }
     }
 }

@@ -149,12 +149,13 @@ post 방식) // vueInit // 참고) 부서참고
 </template>
 <script>
 import EmpService from '@/services/basic/EmpService';
+
 export default {
   // TODO: 데이터 바인딩 속성 정의
   data() {
     return {
-      emp: {}, // 빈 객체
-      submitted: false, // 저장버튼 클릭하면 true 바뀜
+      emp: {},         // 빈 객체
+      submitted: false // 저장버튼 클릭하면 true 바뀜
     };
   },
   // TODO: 함수 정의

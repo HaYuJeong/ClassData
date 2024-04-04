@@ -24,6 +24,26 @@ const routes = [
   {
     path: '/add-emp',
     component: () => import('../views/basic/emp/AddEmp.vue')
+  },
+  {
+    // TODO: 사용법 - path: "/emp/:변수명"
+    path: '/emp/:eno',
+    component: () => import('../views/basic/emp/EmpDetail.vue')
+  },
+  {
+    // TODO: fileDb
+    path: '/fileDb',
+    component: () => import('../views/advanced/fileDb/FileDbList.vue')
+  },
+  {
+    // TODO: fileDb
+    path: '/add-fileDb',
+    component: () => import('../views/advanced/fileDb/AddFileDb.vue')
+  },
+  {
+    // TODO: gallery
+    path: '/gallery',
+    component: () => import('../views/advanced/gallery/GalleryList.vue')
   }
 ]
 

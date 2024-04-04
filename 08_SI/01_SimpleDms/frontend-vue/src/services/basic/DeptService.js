@@ -30,6 +30,11 @@ class DeptService {
         // TODO: 사용법 : http.put(`컨트롤러함수url/${dno}`, 수정할객체)
         return http.put(`/basic/dept/${dno}`, data);
     }
+    // TODO: 삭제함수 : 부서번호(dno)
+    // TODO: 삭제(delete) -> delete 방식 -> @DeleteMapping. ? 방식 아니라서 파라미터 방식
+    delete(dno){
+        return http.delete(`/basic/dept/deletion/${dno}`)   // axios 에 delete 함수가 있음
+    }
 }
 
 // 내보내기 : 다른 js 에서 사용하기 위해

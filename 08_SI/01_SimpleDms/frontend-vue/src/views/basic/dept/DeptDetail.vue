@@ -55,7 +55,7 @@
         </div>
 
         <!-- TODO: 메세지가 있으면 true라서 {{message}}가 보이고, 없어서 ""이면 false-->
-        <p v-if="message" class="alert alert-success mt-3 text-center">
+        <p v-if="message != ''" class="alert alert-success mt-3 text-center">
           {{ message }}
         </p>
       </div>
@@ -102,12 +102,29 @@ export default {
         let response = await DeptService.update(this.dept.dno, this.dept); // 수정버튼을 누른다는것은, 이미 상세조회가 끝난이후며 dno에 값이 다 들어와있음.
         console.log(response.data); // 로깅
         this.message = "수정이 성공했습니다."; // 화면에 성공메세지 출력 : message 바인딩 변수
+        this.$router.push("/dept");
       } catch (e) {
         console.log(e);
       }
     },
-    // TODO: 삭제요청 함수
-    deleteDept() {},
+    // TODO: 삭제요청 함수 : 비동기 코딩 : async ~ await
+    async deleteDept() {
+      try {
+        if (confirm("정말로 삭제하시겠습니까?")) {
+          // 삭제 동작을 수행하는 코드
+          let response = await DeptService.delete(this.dept.dno);
+          console.log(response);
+          alert("삭제되었습니다.");
+          this.$router.push("/dept"); // 강제이동 코드. 지정한 url로 강제이동 해준다.
+        } else {
+          // 삭제를 취소하는 코드
+          console.log("삭제가 취소되었습니다.");
+          this.$router.push("/dept");
+        }
+      } catch (e) {
+        console.log(e);
+      }
+    },
   },
   // TODO: 화면이 뜰 때 자동으로 실행되는 함수
   mounted() {

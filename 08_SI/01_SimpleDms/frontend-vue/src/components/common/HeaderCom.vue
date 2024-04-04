@@ -18,10 +18,11 @@
         </button>
 
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <!-- 메뉴 -->
+          <!-- 메뉴 -->
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="nav-item">
               <a class="nav-link active" aria-current="page" href="#">Home</a>
+              <!-- 기본예제 메뉴 #1 -->
             </li>
             <li class="nav-item dropdown">
               <a
@@ -42,6 +43,29 @@
                 </li>
                 <li>
                   <a class="dropdown-item" href="add-emp">Add Emp(연습)</a>
+                </li>
+              </ul>
+            </li>
+            <!-- 고급예제 메뉴 #2 -->
+            <li class="nav-item dropdown">
+              <a
+                class="nav-link dropdown-toggle"
+                href="#"
+                role="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                고급 예제
+              </a>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="/fileDb">FileDb</a></li>
+                <li><a class="dropdown-item" href="/add-fileDb">Add FileDb</a></li>
+                <li><hr class="dropdown-divider" /></li>
+                <li>
+                  <a class="dropdown-item" href="/gallery">Gallery(연습)</a>
+                </li>
+                <li>
+                  <a class="dropdown-item" href="add-gallery">Add Gallery(연습)</a>
                 </li>
               </ul>
             </li>

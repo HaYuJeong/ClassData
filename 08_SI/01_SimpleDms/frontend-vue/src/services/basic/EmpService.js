@@ -9,6 +9,15 @@ class EmpService {
     // TODO: 사용법 : http.post("컨트롤러함수url", 생성할객체)
     return http.post("/basic/emp", data);
   }
+  get(eno){
+    return http.get(`/basic/emp/${eno}`);
+  }
+  update(eno,data){
+    return http.put(`/basic/emp/${eno}`, data);
+  }
+  delete(eno){
+    return http.delete(`/basic/emp/deletion/${eno}`);
+  }
 }
 
 export default new EmpService();
