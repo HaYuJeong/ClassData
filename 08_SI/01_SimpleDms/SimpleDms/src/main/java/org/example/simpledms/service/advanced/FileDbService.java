@@ -49,7 +49,7 @@ public class FileDbService {
 //          (1) 현재 기본주소 : http://localhost:8000
 //          (2) 추가 주소 붙임 : /api/advanced/fileDb
 //          (3) 파일명(uuid) 붙임 : 다운로드 파일명(유일해야함) : uuid (xxxx...)
-//              => http://localhost:8000//advanced/fileDb/xxxx
+//              => http://localhost:8000/api/advanced/fileDb/xxxx
 //      1-3) FileDb 객체에 넣어서 저장(save)
     public FileDb save(String uuid
             , String fileTitle

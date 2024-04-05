@@ -99,7 +99,7 @@ export default {
       try {
         // TODO: 공통 수정함수
         // TODO: 비동기 코딩 : async ~ await
-        let response = await DeptService.update(this.dept.dno, this.dept); // 수정버튼을 누른다는것은, 이미 상세조회가 끝난이후며 dno에 값이 다 들어와있음.
+        let response = await DeptService.update(this.dept); // 수정버튼을 누른다는것은, 이미 상세조회가 끝난이후며 dno에 값이 다 들어와있음.
         console.log(response.data); // 로깅
         this.message = "수정이 성공했습니다."; // 화면에 성공메세지 출력 : message 바인딩 변수
         this.$router.push("/dept");

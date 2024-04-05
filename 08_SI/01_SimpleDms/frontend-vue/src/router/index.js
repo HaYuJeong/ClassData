@@ -36,14 +36,29 @@ const routes = [
     component: () => import('../views/advanced/fileDb/FileDbList.vue')
   },
   {
-    // TODO: fileDb
+    // TODO: add-fileDb
     path: '/add-fileDb',
     component: () => import('../views/advanced/fileDb/AddFileDb.vue')
+  },
+  {
+    // TODO: 상세조회
+    path: '/fileDb/:uuid',
+    component: () => import('../views/advanced/fileDb/FileDbDetail.vue')
   },
   {
     // TODO: gallery
     path: '/gallery',
     component: () => import('../views/advanced/gallery/GalleryList.vue')
+  },
+  {
+    // TODO: add-gallery
+    path: '/add-gallery',
+    component: () => import('../views/advanced/gallery/AddGallery.vue')
+  },
+  {
+    // TODO: 상세조회
+    path: '/gallery/:uuid',
+    component: () => import('../views/advanced/gallery/GalleryDetail.vue')
   }
 ]
 

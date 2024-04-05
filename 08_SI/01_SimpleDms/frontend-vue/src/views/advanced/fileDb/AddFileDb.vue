@@ -70,6 +70,8 @@
   </div>
 </template>
 <script>
+import FileDbService from '@/services/advanced/FileDbService';
+
 export default {
     // TODO: 데이터 바인딩 속성 정의
     data() {
@@ -103,10 +105,12 @@ export default {
             // 로깅
             console.log(response);
             // 성공 메세지 출력
-            this.message = response.data;
+            // this.message = response.data;
+            alert("추가완료");  // 하면 못넘어가게 막음. this.message 는 router 가 더 빨라서 메세지가 출력되기도 전에 바로 넘어감      
+            this.$router.push("/fileDb");
             } catch(e) {
                 this.currentImage = undefined;   // 원인 모를 에러가 나면 현재 선택된 이미지 변수를 초기화 시키기, 
-                this.message = ""                // 에러메세지도 띄우기
+                this.message = "";                // 에러메세지도 띄우기
                 console.log(e);
             }
         }

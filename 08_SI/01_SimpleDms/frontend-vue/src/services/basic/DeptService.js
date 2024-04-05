@@ -25,10 +25,10 @@ class DeptService {
         return http.get(`/basic/dept/${dno}`);
     }
     // TODO: 수정함수 : 부서번호(dno), 수정할 객체(data)
-    update(dno, data){
+    update(data){
         // TODO: 수정(update) -> put 방식 -> @PutMapping
         // TODO: 사용법 : http.put(`컨트롤러함수url/${dno}`, 수정할객체)
-        return http.put(`/basic/dept/${dno}`, data);
+        return http.put(`/basic/dept/${data.dno}`, data);
     }
     // TODO: 삭제함수 : 부서번호(dno)
     // TODO: 삭제(delete) -> delete 방식 -> @DeleteMapping. ? 방식 아니라서 파라미터 방식

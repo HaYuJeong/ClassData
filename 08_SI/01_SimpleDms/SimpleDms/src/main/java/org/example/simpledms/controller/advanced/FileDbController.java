@@ -83,4 +83,95 @@ public class FileDbController {
 //            통신 에러 : axios.Error
         }
     }
+
+    //    TODO: 추가 함수 : insert(파일업로드한다고 생각)
+//    TODO: 1) 저장버튼 클릭 시 실행될 함수
+//          저장(insert) -> post 방식 -> @PostMapping
+    @PostMapping("fileDb/upload")
+    public ResponseEntity<Object> create(
+            @RequestParam(defaultValue = "") String fileTitle, // 프론트에서 fileTitle, fileContent, image 이름을 보내고 있음.
+            @RequestParam(defaultValue = "") String fileContent,
+            @RequestParam MultipartFile image
+    ){
+        try{
+//            DB 서비스 함수 실행
+            fileDbService.save(null, fileTitle, fileContent, image);
+
+//            프론트에 신호 보내기
+            return new ResponseEntity<>("업로드를 성공하였습니다", HttpStatus.OK);
+
+        } catch (Exception e) {
+            // ResponseEntity는 데이터도, 신호도 보낼 수 있음, 문자열도 보낼 수 있음
+            return new ResponseEntity<>("업로드시 에러가 발생", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+//    TODO: 2) 이미지 다운로드 함수 : jsp 소스 동일 : 소스 재사용, @ResponseBody는 @RestsController에 포함되어있어서 안써도됨
+    @GetMapping("/fileDb/{uuid}")
+    public ResponseEntity<byte[]> findByIdDownloading(@PathVariable String uuid) {
+        FileDb fileDb = fileDbService.findById(uuid).get();
+
+        return ResponseEntity.ok()
+//           Todo : attachment: => attachment;
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + fileDb.getFileName() + "\"")
+                .body(fileDb.getFileData());
+    }
+
+//    TODO: 상세조회 함수
+//         조회(select) -> get 방식 -> @GetMapping
+    @GetMapping("/fileDb/get/{uuid}")
+    public ResponseEntity<Object> findById(
+            @PathVariable String uuid
+    ){
+        try {
+//            TODO: DB 상세조회 서비스 함수 실행
+            Optional<FileDb> optionalFileDb = fileDbService.findById(uuid);
+
+            if (optionalFileDb.isEmpty() == true) {
+//                데이터 없음(203)
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            } else {
+//                데이터 있음(200)
+                return new ResponseEntity<>(optionalFileDb.get()
+                        , HttpStatus.OK);
+            }
+
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+//    TODO: 수정함수
+    @PutMapping("/fileDb/{uuid}")
+    public ResponseEntity<Object> update(
+            @PathVariable String uuid,
+            @RequestParam(defaultValue = "") String fileTitle,
+            @RequestParam(defaultValue = "") String fileContent,
+            @RequestParam MultipartFile image
+            ){
+        try{
+            fileDbService.save(uuid, fileTitle, fileContent, image);
+            return new ResponseEntity<>("업로드 수정 성공", HttpStatus.OK);
+        } catch(Exception e){
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+//    TODO: 삭제 함수
+    @DeleteMapping("/fileDb/deletion/{uuid}")
+    public ResponseEntity<Object> delete(
+            @PathVariable String uuid
+    ){
+try{
+//    DB 삭제 서비스 실행
+    boolean success = fileDbService.removeById(uuid);
+    if (success == true) {
+        return new ResponseEntity<>(HttpStatus.OK);         // 삭제 성공
+    } else {
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT); // 데이터 없음
+    }
+} catch(Exception e){
+    return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+}
+    }
 }

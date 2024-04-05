@@ -9,15 +9,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * packageName : org.example.simpledms.controller.advanced
@@ -73,6 +73,92 @@ public class GalleryController {
         } catch (Exception e) {
 //            TODO: INTERNAL_SERVER_ERROR(500) : 백엔드 서버 에러
 //                  아래 코드는 프론트(웹 브라우저)로 신호(500)를 보냄
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    //    저장 함수 : 1) 저장 버튼 클릭시 실행 함수
+//    저장(insert) -> post 방식 -> @PostMapping
+    @PostMapping("/gallery/upload")
+    public ResponseEntity<Object> create(
+            @RequestParam(defaultValue = "") String galleryTitle,
+            @RequestParam MultipartFile image
+    ) {
+        try {
+//            DB 서비스 함수 실행
+            galleryService.save(null, galleryTitle, image);
+
+            return new ResponseEntity<>("업로드 성공", HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>("업로드시 에러가 발생"
+                    , HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    //               2) 이미지 다운로드 함수
+    @GetMapping("/gallery/{uuid}")
+    public ResponseEntity<byte[]> findDownload(@PathVariable String uuid) {
+        Gallery gallery = galleryService.findById(uuid).get(); // 상세조회
+
+        return ResponseEntity.ok()
+//           Todo : attachment: => attachment;
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + gallery.getGalleryFileName() + "\"")
+                .body(gallery.getGalleryData());
+    }
+
+    //    TODO: 상세조회 함수
+//         조회(select) -> get 방식 -> @GetMapping
+    @GetMapping("/gallery/get/{uuid}")
+    public ResponseEntity<Object> findById(
+            @PathVariable String uuid
+    ){
+        try {
+//            TODO: DB 상세조회 서비스 함수 실행
+            Optional<Gallery> optionalGallery = galleryService.findById(uuid);
+
+            if (optionalGallery.isEmpty() == true) {
+//                데이터 없음(203)
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            } else {
+//                데이터 있음(200)
+                return new ResponseEntity<>(optionalGallery.get()
+                        , HttpStatus.OK);
+            }
+
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    //    TODO: 수정함수
+    @PutMapping("/gallery/{uuid}")
+    public ResponseEntity<Object> update(
+            @PathVariable String uuid,
+            @RequestParam(defaultValue = "") String galleryTitle,
+            @RequestParam MultipartFile image
+    ) {
+        try {
+            galleryService.save(uuid, galleryTitle, image);
+            return new ResponseEntity<>("업로드 수정 성공", HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    //    TODO: 삭제 함수
+    @DeleteMapping("/gallery/deletion/{uuid}")
+    public ResponseEntity<Object> delete(
+            @PathVariable String uuid
+    ){
+        try{
+//    DB 삭제 서비스 실행
+            boolean success = galleryService.removeById(uuid);
+            if (success == true) {
+                return new ResponseEntity<>(HttpStatus.OK);         // 삭제 성공
+            } else {
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT); // 데이터 없음
+            }
+        } catch(Exception e){
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }

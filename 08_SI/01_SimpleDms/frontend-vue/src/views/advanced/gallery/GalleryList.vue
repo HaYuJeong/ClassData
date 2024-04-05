@@ -118,7 +118,7 @@ export default {
           this.pageSize
         ); // 제목 검색어, 현재페이지번호, 1페이지당개수
         // TODO: 객체 분할 할당 , try catch 로 에러발생하면 console.log 로 출력
-        const { gallery, totalItems } = response.data;
+        const { gallery, totalItems } = response.data;  // gallery : 객체배열. 그 객체안에 속성이 들어있음 
         this.gallery = gallery; // 파일 배열 : 위에서 반복문 돌림
         this.totalItems = totalItems; // 전체 데이터 개수
       } catch (e) {
@@ -126,7 +126,12 @@ export default {
       }
     },
     // TODO: 삭제 함수
-    deleteGallery() {},
+    async deleteGallery(uuid) {
+      let response = await GalleryService.delete(uuid);
+      console.log(response.data);
+      // alert("삭제 완료");
+      this.retrieveGallery();
+    },
     // TODO: 공통함수(페이징)
     // TODO: select 박스 변경시 실행될 함수
     // TODO: select 태그 연결

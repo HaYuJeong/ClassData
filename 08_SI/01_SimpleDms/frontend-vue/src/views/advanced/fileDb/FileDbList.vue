@@ -59,7 +59,7 @@
                 <!-- 상세글(내용) -->
                 <p class="card-text">{{data.fileContent}}</p>
                 <!-- 링크 걸기, 변수와 쓰기 위해 : 붙여서 :to -->
-                <router-link :to="'/fileDb' + data.uuid">
+                <router-link :to="'/fileDb/' + data.uuid">
                 <span class="badge bg-warning">수정</span>
                 </router-link>
                 <a
@@ -69,7 +69,7 @@
                     }
                   "
                   class="ms-2"
-                  @click="deleteFileDb(data,uuid)"      
+                  @click="deleteFileDb(data.uuid)"      
                 >
                 <!-- @click : 클릭이벤트 함수 걸기-->
                   <span class="badge bg-danger">삭제</span>
@@ -118,7 +118,15 @@ export default {
         }
     },
     // TODO: 삭제 함수
-    deleteFileDb() {},
+    async deleteFileDb(uuid) {
+      try {
+        let response = await FileDbService.delete(uuid);  // 이미 전체조회 페이지라서 강제이동 할 필요가 없음
+        console.log(response.data);  // 로깅 : 성공하던 실패하던 적어야 에러탐지가 편함
+        this.retrieveFileDb();       // 삭제하고 나서 전체조회 페이지를 재조회하기
+      } catch (e) {
+        console.log(e);
+      }
+    },
     // TODO: 공통함수(페이징)
     // TODO: select 박스 변경시 실행될 함수
     // TODO: select 태그 연결
@@ -127,7 +135,9 @@ export default {
       this.retrieveFileDb(); // 3) 재조회 요청
     },
   },
-  // TODO: 화면이 뜰 때 자동으로 실행되는 함수
+  // TODO: 화면이 뜰 때 자동으로 실행되는 함수 이벤트 함수. 라이프사이클 함수. 
+  // created(화면에 랜더링안ㅇ됨) / mounted(랜더링:화면에 html태그 보이고 나서 보임.)
+  // 화면에 뜰때 전체조회를 하고싶을떄 사용. 개발자의 선택.
   mounted() {
     // TODO: 화면이 뜰 때 전체 조회하기
     this.retrieveFileDb();
