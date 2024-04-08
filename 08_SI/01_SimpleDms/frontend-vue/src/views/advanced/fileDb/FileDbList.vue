@@ -122,6 +122,7 @@ export default {
       try {
         let response = await FileDbService.delete(uuid);  // 이미 전체조회 페이지라서 강제이동 할 필요가 없음
         console.log(response.data);  // 로깅 : 성공하던 실패하던 적어야 에러탐지가 편함
+        alert("삭제 완료");
         this.retrieveFileDb();       // 삭제하고 나서 전체조회 페이지를 재조회하기
       } catch (e) {
         console.log(e);

@@ -80,7 +80,9 @@ export default {
         // 로깅
         console.log(response);
         // 성공 메세지 출력
-        this.message = response.data;
+        // this.message = response.data;
+        alert("업로드 완료");
+        this.$router.push("/gallery");
       } catch (e) {
         this.currentImage = undefined; // 원인 모를 에러가 나면 현재 선택된 이미지 변수를 초기화 시키기,
         this.message = ""; // 에러메세지도 띄우기

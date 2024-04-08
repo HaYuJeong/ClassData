@@ -129,7 +129,7 @@ export default {
     async deleteGallery(uuid) {
       let response = await GalleryService.delete(uuid);
       console.log(response.data);
-      // alert("삭제 완료");
+      alert("삭제 완료");
       this.retrieveGallery();
     },
     // TODO: 공통함수(페이징)
