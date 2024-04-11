@@ -11,6 +11,10 @@ class SimpleCartService{
     create(data) {
         return http.post("/shop/simple-cart", data);
     }
+    // TODO: 장바구니 삭제함수 : 장바구니번호(scno)
+    remove(scno){
+        return http.delete(`/shop/simple-cart/deletion/${scno}`);
+    }
 }
 
 export default new SimpleCartService;

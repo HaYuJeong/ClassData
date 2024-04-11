@@ -68,7 +68,7 @@ TB_CART
             <h5 class="card-title">₩ {{ data.unitPrice }}</h5>
             <!-- 카드 상세페이지 이동 링크 -->
             <router-link
-              :to="'/cart/' + data.spno"
+              :to="'/product-cart/' + data.pno"
               class="btn btn-primary"
             >
               Product Cart

@@ -11,13 +11,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * packageName : org.example.simpledms.controller.shop.product
@@ -65,6 +63,21 @@ public class ProductController {
             }
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);  // 500 번 에러 보내기
+        }
+    }
+
+//       TODO: 상세 조회 함수
+    @GetMapping("/product/{pno}")
+    public ResponseEntity<Object> findById(@PathVariable int pno){
+        try{
+            Optional<Product> product = productService.findById(pno);
+            if (product.isEmpty() == false) {
+                return new ResponseEntity<>(product.get(), HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            }
+        } catch(Exception e){
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 

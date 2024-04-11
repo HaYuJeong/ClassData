@@ -4,54 +4,49 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 /**
  * packageName : org.example.simpledms.model.entity.shop.product
- * fileName : Product
+ * fileName : Cart
  * author : hayj6
- * date : 2024-04-09(009)
+ * date : 2024-04-10(010)
  * description :
  * 요약 :
  * <p>
  * ===========================================================
  * DATE            AUTHOR             NOTE
  * -----------------------------------------------------------
- * 2024-04-09(009)         hayj6          최초 생성
+ * 2024-04-10(010)         hayj6          최초 생성
  */
 @Entity
-@Table(name = "TB_PRODUCT")
+@Table(name="TB_CART")
 @SequenceGenerator(
-        name = "SQ_PRODUCT_GENERATOR"
-        , sequenceName = "SQ_PRODUCT"
+        name = "SQ_CART_GENERATOR"
+        , sequenceName = "SQ_CART"
         , initialValue = 1
         , allocationSize = 1
 )
 @Getter
 @Setter
 @ToString
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @DynamicInsert
 @DynamicUpdate
-public class Product {
+// soft delete
+@Where(clause = "DELETE_YN = 'N'")
+@SQLDelete(sql = "UPDATE TB_CART SET DELETE_YN = 'Y', DELETE_TIME=TO_CHAR(SYSDATE, 'YYYY-MM-DD HH24:MI:SS') WHERE CNO = ?")
+public class Cart {
+//    cno	number
 //    pno	number
-//    kind_code	number
-//    pname	varchar2(255 byte)
-//    image	varchar2(255 byte)
-//    unit_price	number
-//    inventory_count	number
-//    use_yn	varchar2(1 byte)
+//    amount	number
 @Id
 @GeneratedValue(strategy = GenerationType.SEQUENCE
-        , generator = "SQ_PRODUCT_GENERATOR"
+        , generator = "SQ_CART_GENERATOR"
 )
+    private Integer cno;
     private Integer pno;
-    private Integer kindCode;
-    private String pname;
-    private String image;
-    private Integer unitPrice;
-    private Integer inventoryCount;
-    private String useYn;
-
+    private Integer amount;
 }

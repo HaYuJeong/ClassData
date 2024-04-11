@@ -6,9 +6,9 @@ class ProductService {
     return http.get(`/shop/product?pname=${pname}&page=${page}&size=${size}`);
   }
   // TODO: 상품 상세 조회 : 기본키(상품번호(spno))
-  // get(spno) {
-  //   return http.get(`/shop/product/${spno}`);
-  // }
+  get(pno) {
+    return http.get(`/shop/product/${pno}`);
+  }
 }
 
 export default new ProductService();
