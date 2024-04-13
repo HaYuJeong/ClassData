@@ -59,7 +59,7 @@ public class SimpleOrder extends BaseTimeEntity2 {
     private Integer sono;        // 주문번호, 기본키, 시퀀스
 
     private String orderDate;   // 주문일자
-    private String orderStatus; // 주문상태(50001: 주문완료, 50002: 결재완료,  50011: 결재취소)
+    private Integer orderStatus; // 주문상태(50001: 주문완료, 50002: 결재완료,  50011: 결재취소)
     private Integer productAmount; // 총 상품금액
     private Integer deliveryAmount; // 배송비
     private Integer orderAmount;    // 주문금액 = 총 상품금액 + 배송비

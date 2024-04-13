@@ -91,7 +91,7 @@
 
       <div class="row g-3 align-items-center mb-3">
         <div class="col-3">
-          <label htmlFor="deliveryMsg" class="col-form-label">
+          <label htmlFor="deliveryMsg" class="col-form-label" >
             배송 메세지
           </label>
         </div>
@@ -103,7 +103,7 @@
             class="form-control"
             placeholder="배송 메세지"
             name="deliveryMsg"
-            v-model="deleveryMsg"
+            v-model="deliveryMsg"
           />
         </div>
       </div>
@@ -175,7 +175,7 @@ export default {
     // TODO: 주문 함수 : 1) 주문 테이블 + 주문 상세 테이블 동시에 insert 하기
     // TODO:            2) 결제 페이지로 이동
     async goApproval() {
-      // TODO: 1) 주문날짜 : 현재 날짜
+      if(this.deliveryAddr && this.deliveryMsg){     // TODO: 1) 주문날짜 : 현재 날짜
       let now = new Date(); // js 날짜 객체
       // 날짜포맷 : yyyy-mm-dd hh:mi:ss 형태
       // 년도 : now.getFullYear()
@@ -242,10 +242,12 @@ export default {
         console.log(response.data);     // 로깅
         // 결제 페이지로 이동 : 결제 api 사용하면 여기에 코딩하기
         // -> 주문번호(response.data.sono) 도 전송하기
-        this.$router.push("/simple-approval" + response.data.sono);
+        this.$router.push("/simple-approval/" + response.data.sono);
       } catch (e) {
         console.log(e); // 에러발생하면 출력하기
-      }
+      }}
+      else {alert("배송주소와 배송메세지를 입력하세요.")}
+ 
     },
     // TODO: 주문 취소 : 장바구니 전체 페이지로 다시 이동
     cancelOrder() {

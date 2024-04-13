@@ -3,12 +3,15 @@ package org.example.simpledms.service.shop.simpleproduct;
 import org.example.simpledms.model.dto.shop.simpleproduct.SimpleOrderDto;
 import org.example.simpledms.model.entity.shop.simpleproduct.SimpleOrder;
 import org.example.simpledms.model.entity.shop.simpleproduct.SimpleOrderDetail;
+import org.example.simpledms.model.entity.shop.simpleproduct.SimpleProduct;
 import org.example.simpledms.repository.shop.simpleproduct.SimpleOrderDetailRepository;
 import org.example.simpledms.repository.shop.simpleproduct.SimpleOrderRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
 
 /**
  * packageName : org.example.simpledms.service.shop.simpleproduct
@@ -26,12 +29,12 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class SimpleOrderService {
     @Autowired
-    SimpleOrderRepository simpleOrderRepository ;
+    SimpleOrderRepository simpleOrderRepository;
 
     @Autowired
-    SimpleOrderDetailRepository simpleOrderDetailRepository ;
+    SimpleOrderDetailRepository simpleOrderDetailRepository;
 
-//    TODO: DTO 변환 패키지
+    //    TODO: DTO 변환 패키지
     ModelMapper modelMapper = new ModelMapper();
 //    TODO: 저장함수 : 주문테이블 insert 하고 + 주문 상세테이블(배열로 들어옴) insert 하기(배열이라서 반복문으로 insert 해야함)
 //          => 프론트에서 주문객체를 보내는데 그 안에 주문상세객체배열을 같이 보내고 있음
@@ -40,7 +43,7 @@ public class SimpleOrderService {
 //          => 주문객체 Dto 를 정의해야함 : 주문상세 객체배열(List), 주문상태 등
 
     @Transactional
-    public SimpleOrder insert(SimpleOrderDto simpleOrderDto){
+    public SimpleOrder insert(SimpleOrderDto simpleOrderDto) {
 //        TODO: 1) insert 할 때는 DTO -> Entity 로 변환해서 insert
 //              (1) 직접 변환로직 코딩하기 : 숙련자 추천
 //              (2) 자동 변환 패키지 : 초보자 추천 (ModelMapper 패키지 : 성능 저하)
@@ -67,5 +70,17 @@ public class SimpleOrderService {
             simpleOrderDetailRepository.save(tmpSimpleOrderDetail);
         }
         return simpleOrder1;    // 저장된 주문 객체
+    }
+
+    //    TODO: 주문 상세조회
+    public Optional<SimpleOrder> findById(int sono) {
+        Optional<SimpleOrder> simpleOrder = simpleOrderRepository.findById(sono);
+        return simpleOrder;
+    }
+
+//    TODO: 주문 update : 카프카 소비자에서 사용하는 함수
+    public void update(SimpleOrder simpleOrder ) {
+//        DB 수정
+        simpleOrderRepository.save(simpleOrder);    // return 값 없어서 void
     }
 }
