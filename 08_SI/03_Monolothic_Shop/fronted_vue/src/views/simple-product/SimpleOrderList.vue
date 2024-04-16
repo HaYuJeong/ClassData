@@ -46,12 +46,12 @@
       @click="retrieveSimpleCart"
     ></b-pagination>
     <!-- {/* paging 끝 */} -->
-     <div class="row" >
+    <div class="row">
       <div class="card mb-3" v-for="(data, index) in simpleCart" :key="index">
         <div class="row g-0 p-3">
           <div class="col-md-4 p-3 border">
             <img
-                :src="data.imgPath"
+              :src="data.imgPath"
               class="img-fluid rounded-start"
               alt="..."
               style="{ height: 15 + 'vh', width: 5 + 'vw' }"
@@ -91,7 +91,7 @@
 
       <div class="row g-3 align-items-center mb-3">
         <div class="col-3">
-          <label htmlFor="deliveryMsg" class="col-form-label" >
+          <label htmlFor="deliveryMsg" class="col-form-label">
             배송 메세지
           </label>
         </div>
@@ -131,7 +131,7 @@
 
 <script>
 import SimpleOrderService from "@/services/shop/simple-product/SimpleOrderService";
-import SimpleCartService from '@/services/shop/simple-product/SimpleCartService';
+import SimpleCartService from "@/services/shop/simple-product/SimpleCartService";
 
 export default {
   data() {
@@ -175,79 +175,83 @@ export default {
     // TODO: 주문 함수 : 1) 주문 테이블 + 주문 상세 테이블 동시에 insert 하기
     // TODO:            2) 결제 페이지로 이동
     async goApproval() {
-      if(this.deliveryAddr && this.deliveryMsg){     // TODO: 1) 주문날짜 : 현재 날짜
-      let now = new Date(); // js 날짜 객체
-      // 날짜포맷 : yyyy-mm-dd hh:mi:ss 형태
-      // 년도 : now.getFullYear()
-      // 월 : now.getMonth()
-      // 일 : noew.getDate()
-      // 시 : now.getHours()
-      // 분 : now.getMinutes()
-      // 초 : noww.getSeconds()
-      let formatNow = `${now.getFullYear()}-${now.getMonth()}-${now.getDate()} ${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}`;
+      if (this.deliveryAddr && this.deliveryMsg) {
+        // TODO: 1) 주문날짜 : 현재 날짜
+        let now = new Date(); // js 날짜 객체
+        // 날짜포맷 : yyyy-mm-dd hh:mi:ss 형태
+        // 년도 : now.getFullYear()
+        // 월 : now.getMonth()
+        // 일 : noew.getDate()
+        // 시 : now.getHours()
+        // 분 : now.getMinutes()
+        // 초 : noww.getSeconds()
+        let formatNow = `${now.getFullYear()}-${now.getMonth()}-${now.getDate()} ${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}`;
 
-      //   TODO: 2) 장바구니의 상품별 금액 = 단가(unitPrice) * 개수(cartCount) -> 모든 상품별 총금액
-      // 함수형 프로그래밍 3총사 : map, foreach, filter 등 + reduce
-      // reduce : 배열변수에 있는 매개변수의 값들을 계속 누적시켜 합 또는 차를 구할 수 있는 함수
-      // 누적합 알고리즘 : sum(누적변수) = sum(누적변수) + count(배열값)
-      let totalPrice = this.simpleCart // 배열만 사용할 수 있는 함수. 내부적으로 반복문이 돈다. simpleCart에는 unitPrice, cartCount 다 있다.
-        .map((data) => data.unitPrice * data.cartCount)
-        // 사용법 : .reduce((누적변수, 배열값) => 누적변수 + 배열값);
-        .reduce((acc, cur) => acc + cur); // 총금액
+        //   TODO: 2) 장바구니의 상품별 금액 = 단가(unitPrice) * 개수(cartCount) -> 모든 상품별 총금액
+        // 함수형 프로그래밍 3총사 : map, foreach, filter 등 + reduce
+        // reduce : 배열변수에 있는 매개변수의 값들을 계속 누적시켜 합 또는 차를 구할 수 있는 함수
+        // 누적합 알고리즘 : sum(누적변수) = sum(누적변수) + count(배열값)
+        let totalPrice = this.simpleCart // 배열만 사용할 수 있는 함수. 내부적으로 반복문이 돈다. simpleCart에는 unitPrice, cartCount 다 있다.
+          .map((data) => data.unitPrice * data.cartCount)
+          // 사용법 : .reduce((누적변수, 배열값) => 누적변수 + 배열값);
+          .reduce((acc, cur) => acc + cur); // 총금액
 
-      // TODO: 3) 주문상세 객체 정의 (장바구니에 담고 한번에 주문. 주문번호는 같은데 상품이 다 다르니까 배열로 해야함)
-      // TODO:   => ex) 주문번호(1) -> 주문상태(50001) : 주문(부모)
-      // TODO:   =>     주문번호(1) -> 상품명(연필), 상품이미지, 장바구니개수 등
-      // TODO:   =>     주문번호(1) -> 상품명(샤프), 상품이미지, 장바구니개수 등
-      // TODO:   =>     주문번호(1) -> 상품명(지우개), 상품이미지, 장바구니개수 등
-      let simpleOrderDetail = {
-        // 객체 초기화시키기
-        sono: null, // 주문번호는 일단 없음(null -> 이후 시퀀스 사용)
-        spno: 0, // 상품번호도 일단 초기화
-        productCount: 0, // 장바구니 개수 0개
-      };
-      // TODO: 주문상세 배열
-      let simpleOrderDetailList = []; // 주문상세 객체배열 정의
-
-      // 위의 주문상세 배열 만들기
-      // 반복문 : java의 향상된 for문과 비슷한 javascript의 향상된 for문 : forof
-      for (const data of this.simpleCart) {
-        // simpleCart에 모든 정보가 다 있다.
-        simpleOrderDetail.spno = data.spno; // 상품번호
-        simpleOrderDetail.productCount = data.cartCount; // 장바구니 갯수 = 상품 갯수
-        // 주문상세 배열에 주문상세 객체를 넣기
-        // 사용법 : 배열변수.push(값);   // 배열에 값 넣기 함수
-        simpleOrderDetailList.push(simpleOrderDetail); // 객체배열
-      }
-
-      // TODO: 4) 백엔드(spring) insert 요청 : 비동기 코딩 async ~ await
-      try {
-        // TODO: 임시 주문 객체 : 주문 상세 객체 배열 속성이 있음
-        // 주문페이지, 주문상세페이지를 둘다 백엔드로 보내야함
-        // 객체 안에 객체 배열을 넣어야 함
-        let data = {
-          // 백엔드의 이름과 동일해야 통신을 할 수 있음
-          simpleOrderDetailList: simpleOrderDetailList, // 주문상세 객체배열(주문 상세 테이블 insert)
-          orderDate: formatNow, // 주문날짜
-          // 주문상태(50001: 주문완료, 50002: 결재완료, 50011:결재취소)
-          orderStatus: 50001, // 주문상태
-          productAmount: totalPrice, // 상품 총금액
-          deliveryAmount: this.deliveryAmount, // 배달비(3000원으로 하드코딩 해놓음)
-          orderAmount: totalPrice + this.deliveryAmount, // 총 주문 금액 : 상품 총금액 + 배달비 - 포인트(포인트있으면 포인트절감)
-          deliveryAddr: this.deliveryAddr, // 배달 주소
-          deliveryMsg: this.deliveryMsg, // 배달 메세지
+        // TODO: 3) 주문상세 객체 정의 (장바구니에 담고 한번에 주문. 주문번호는 같은데 상품이 다 다르니까 배열로 해야함)
+        // TODO:   => ex) 주문번호(1) -> 주문상태(50001) : 주문(부모)
+        // TODO:   =>     주문번호(1) -> 상품명(연필), 상품이미지, 장바구니개수 등
+        // TODO:   =>     주문번호(1) -> 상품명(샤프), 상품이미지, 장바구니개수 등
+        // TODO:   =>     주문번호(1) -> 상품명(지우개), 상품이미지, 장바구니개수 등
+        let simpleOrderDetail = {
+          // 객체 초기화시키기
+          sono: null, // 주문번호는 일단 없음(null -> 이후 시퀀스 사용)
+          spno: 0, // 상품번호도 일단 초기화
+          productCount: 0, // 장바구니 개수 0개
         };
-        // TODO: 공통 주문추가(create) 서비스 함수 실행
-        let response = await SimpleOrderService.create(data);
-        console.log(response.data);     // 로깅
-        // 결제 페이지로 이동 : 결제 api 사용하면 여기에 코딩하기
-        // -> 주문번호(response.data.sono) 도 전송하기
-        this.$router.push("/simple-approval/" + response.data.sono);
-      } catch (e) {
-        console.log(e); // 에러발생하면 출력하기
-      }}
-      else {alert("배송주소와 배송메세지를 입력하세요.")}
- 
+        // TODO: 주문상세 배열
+        let simpleOrderDetailList = []; // 주문상세 객체배열 정의
+
+        // 위의 주문상세 배열 만들기
+        // 반복문 : java의 향상된 for문과 비슷한 javascript의 향상된 for문 : forof
+        for (const data of this.simpleCart) {
+          // simpleCart에 모든 정보가 다 있다.
+          simpleOrderDetail.spno = data.spno; // 상품번호
+          simpleOrderDetail.productCount = data.cartCount; // 장바구니 갯수 = 상품 갯수
+          // 주문상세 배열에 주문상세 객체를 넣기
+          // 사용법 : 배열변수.push(값);   // 배열에 값 넣기 함수
+          simpleOrderDetailList.push(simpleOrderDetail); // 객체배열
+        }
+
+        // TODO: 4) 백엔드(spring) insert 요청 : 비동기 코딩 async ~ await
+        try {
+          // TODO: 임시 주문 객체 : 주문 상세 객체 배열 속성이 있음
+          // 주문페이지, 주문상세페이지를 둘다 백엔드로 보내야함
+          // 객체 안에 객체 배열을 넣어야 함
+          let data = {
+            // 백엔드의 이름과 동일해야 통신을 할 수 있음
+            simpleOrderDetailList: simpleOrderDetailList, // 주문상세 객체배열(주문 상세 테이블 insert)
+            orderDate: formatNow, // 주문날짜
+            // 주문상태(50001: 주문완료, 50002: 결재완료, 50011:결재취소)
+            orderStatus: 50001, // 주문상태
+            productAmount: totalPrice, // 상품 총금액
+            deliveryAmount: this.deliveryAmount, // 배달비(3000원으로 하드코딩 해놓음)
+            orderAmount: totalPrice + this.deliveryAmount, // 총 주문 금액 : 상품 총금액 + 배달비 - 포인트(포인트있으면 포인트절감)
+            deliveryAddr: this.deliveryAddr, // 배달 주소
+            deliveryMsg: this.deliveryMsg, // 배달 메세지
+          };
+          // TODO: 공통 주문추가(create) 서비스 함수 실행
+          let response = await SimpleOrderService.create(data);
+          console.log(response.data); // 로깅
+          // 결제 페이지로 이동 : 결제 api 사용하면 여기에 코딩하기
+          // -> 주문번호(response.data.sono) 도 전송하기
+          this.$router.push("/simple-approval/" + response.data.sono);
+          // 장바구니 담기 성공 메세지 출력
+          this.message = "장바구니에 잘 담겼습니다.";
+        } catch (e) {
+          console.log(e); // 에러발생하면 출력하기
+        }
+      } else {
+        alert("배송주소와 배송메세지를 입력하세요.");
+      }
     },
     // TODO: 주문 취소 : 장바구니 전체 페이지로 다시 이동
     cancelOrder() {

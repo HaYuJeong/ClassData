@@ -1,6 +1,7 @@
 package org.example.simpledms.config;
 
 import jakarta.servlet.DispatcherType;
+import org.example.simpledms.security.jwt.AuthTokenFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
@@ -10,6 +11,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 /**
  * packageName : org.example.simpledms.config
@@ -36,9 +38,13 @@ public class WebSecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
-//    TODO: 3) JWT(웹 토큰) 객체를 정의
+//    TODO: 3) JWT(웹 토큰) 객체(자동인증을 위한 필터) 를 정의
+    @Bean
+    public AuthTokenFilter authenticationJwtTokenFilter(){
+        return new AuthTokenFilter();   // TODO: 개발자가 작성한 웹토큰 인증필터 생성자 함수
+    }
 
-    //    TODO: 2-1) 공통 jsp, img, css, js 등 : 인증 안받는 것들은 무시하도록 설정
+    //    TODO: 4) 공통 jsp, img, css, js 등 : 인증 안받는 것들은 무시하도록 설정
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
 //      사용법 : (web) -> web.ignoring().requestMatchers("경로", "경로2"...)
@@ -75,7 +81,9 @@ public class WebSecurityConfig {
                 .anyRequest()
                 .authenticated());
 
-//        TODO: 웹 토큰 클래스를 스프링 시큐리티 설정에 끼워넣기
+//        TODO: 웹 토큰 클래스를 스프링 시큐리티 설정에 끼워넣기 : 모든 게시판 조회(CRUD) 에서 아래 인증을 실행함
+//              웹 토큰 인증 필터를 UsernamePasswordAuthenticationFilter(id/암호 인증필터) 앞에 끼워넣기
+        http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }

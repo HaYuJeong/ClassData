@@ -61,6 +61,7 @@
 <script>
 import SimpleOrderService from "@/services/shop/simple-product/SimpleOrderService";
 import SimpleApprovalService from "@/services/shop/simple-product/SimpleApprovalService";
+
 export default {
   data() {
     return {

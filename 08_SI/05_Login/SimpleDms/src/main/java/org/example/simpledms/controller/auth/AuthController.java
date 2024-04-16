@@ -2,8 +2,10 @@ package org.example.simpledms.controller.auth;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.example.simpledms.model.dto.NewUser;
 import org.example.simpledms.model.dto.UserReq;
 import org.example.simpledms.model.dto.UserRes;
+import org.example.simpledms.model.entity.auth.Member;
 import org.example.simpledms.security.jwt.JwtUtils;
 import org.example.simpledms.service.auth.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,7 +52,7 @@ public class AuthController {
     //    TODO: 인증/권한 체크를 위한 인증관리 클래스 객체
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
 
-    //    로그인 함수
+    //    TODO: 로그인 함수
     @PostMapping("/login")
     public ResponseEntity<Object> login(@RequestBody UserReq userReq) {
         try {
@@ -82,6 +84,35 @@ public class AuthController {
             return new ResponseEntity<>(userRes, HttpStatus.OK);
 
         } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+//    TODO: 회원가입 함수(insert)
+    @PostMapping("/register")
+    public ResponseEntity<Object> createUser(
+            @RequestBody NewUser newUser
+            ){
+        try{
+//          TODO: 1) 이메일이 있는지 확인 : 있으면 우리 회원 -> 바로 리턴
+            if (memberService.existById(newUser.getEmail())) {
+                return new ResponseEntity<>("이미 회원입니다.", HttpStatus.BAD_REQUEST);
+            }
+//            TODO: 2) 없으면 새로운 사용자 생성하기
+            Member member = new Member(
+                    newUser.getEmail(),                             // 로그인 ID
+                    passwordEncoder.encode(newUser.getPassword()),  // 암호화 적용
+                    newUser.getName(),                              // 이름
+                    newUser.getCodeName()                           // 권한
+            );
+
+//            TODO: 3) 저장
+            memberService.save(member);
+
+//            TODO: 4) 프론트로 전송
+            return new ResponseEntity<>(member, HttpStatus.OK); // 저장된 member객체와 함께 신호보내기
+        } catch (Exception e){
+            log.debug("에러 : " + e);     // 디버깅
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
